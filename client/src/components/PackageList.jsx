@@ -1,0 +1,137 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ExternalLink, Trash2, Edit, Download, Star, User } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+
+function PackageList({ packages, loading, onDelete }) {
+  const { user } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="loading">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
+  if (packages.length === 0) {
+    return (
+      <div className="card fade-in">
+        <h2>No packages found</h2>
+        <p>Be the first to create a keyboard shortcut package!</p>
+        {user ? (
+          <Link to="/create" className="btn">
+            Create Package
+          </Link>
+        ) : (
+          <Link to="/login" className="btn">
+            Sign In to Create
+          </Link>
+        )}
+      </div>
+    );
+  }
+
+  const handleDelete = async (id, name) => {
+    if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
+      await onDelete(id);
+    }
+  };
+
+  return (
+    <div className="fade-in">
+      <div style={{ marginBottom: '2rem' }}>
+        <h1>Keyboard Shortcut Packages</h1>
+        <p>Discover and share custom keyboard shortcut collections</p>
+      </div>
+      
+      <div className="grid">
+        {packages.map((pkg) => {
+          const shortcuts = JSON.parse(pkg.shortcuts || '[]');
+          const isOwner = user && pkg.author_id === user.id;
+          
+          return (
+            <div key={pkg.id} className="card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                <div>
+                  <h3 style={{ margin: '0 0 0.5rem 0' }}>{pkg.name}</h3>
+                  <p style={{ margin: '0 0 0.5rem 0', opacity: 0.8 }}>{pkg.description}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', opacity: 0.7 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      {pkg.author_avatar ? (
+                        <img 
+                          src={pkg.author_avatar} 
+                          alt={pkg.author_username}
+                          style={{ 
+                            width: '16px', 
+                            height: '16px', 
+                            borderRadius: '50%'
+                          }}
+                        />
+                      ) : (
+                        <User size={14} />
+                      )}
+                      <span>By {pkg.author_username || pkg.author_name}</span>
+                    </div>
+                    {pkg.category && <span>• {pkg.category}</span>}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  {isOwner && (
+                    <button
+                      onClick={() => handleDelete(pkg.id, pkg.name)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.7)' }}
+                      title="Delete package"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              <div style={{ marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <Download size={14} />
+                  <span style={{ fontSize: '0.9rem' }}>{pkg.downloads || 0} downloads</span>
+                  <Star size={14} />
+                  <span style={{ fontSize: '0.9rem' }}>{pkg.rating || 0} rating</span>
+                </div>
+              </div>
+              
+              <div style={{ marginBottom: '1rem' }}>
+                <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Shortcuts ({shortcuts.length})</h4>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                  {shortcuts.slice(0, 3).map((shortcut, index) => (
+                    <span key={index} className="shortcut-key">
+                      {shortcut.key}
+                    </span>
+                  ))}
+                  {shortcuts.length > 3 && (
+                    <span style={{ opacity: 0.7, fontSize: '0.9rem' }}>
+                      +{shortcuts.length - 3} more
+                    </span>
+                  )}
+                </div>
+              </div>
+              
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <Link to={`/package/${pkg.id}`} className="btn">
+                  <ExternalLink size={16} style={{ marginRight: '0.5rem' }} />
+                  View Details
+                </Link>
+                {isOwner && (
+                  <Link to={`/package/${pkg.id}?edit=true`} className="btn btn-secondary">
+                    <Edit size={16} style={{ marginRight: '0.5rem' }} />
+                    Edit
+                  </Link>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default PackageList; 
