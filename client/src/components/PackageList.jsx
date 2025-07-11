@@ -14,21 +14,34 @@ function PackageList({ packages, loading, onDelete }) {
     );
   }
 
+  // Hero section for homepage
+  const Hero = () => (
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '2.5rem 0 2rem 0',
+    }}>
+      <img src="/logo.png" alt="KeyWizard Logo" style={{ width: 90, height: 90, marginBottom: 18, borderRadius: 18, background: '#fffdfa', boxShadow: '0 4px 24px rgba(44,39,33,0.10)' }} />
+      <h1 style={{ fontSize: '2.2rem', fontWeight: 800, margin: 0, color: '#232323', letterSpacing: '-1px', textAlign: 'center' }}>Shortcut Evolution.<br /><span style={{ fontWeight: 400, fontSize: '1.2rem', color: '#6d665b' }}>Be the final form.</span></h1>
+    </div>
+  );
+
   if (packages.length === 0) {
     return (
-      <div className="card fade-in">
-        <h2>No packages found</h2>
-        <p>Be the first to create a keyboard shortcut package!</p>
-        {user ? (
-          <Link to="/create" className="btn">
-            Create Package
-          </Link>
-        ) : (
-          <Link to="/login" className="btn">
-            Sign In to Create
-          </Link>
-        )}
-      </div>
+      <>
+        <Hero />
+        <div className="card fade-in">
+          <h2>No packages found</h2>
+          <p>Be the first to create a keyboard shortcut package!</p>
+          {user ? (
+            <Link to="/create" className="btn">
+              Create Package
+            </Link>
+          ) : (
+            <Link to="/login" className="btn">
+              Sign In to Create
+            </Link>
+          )}
+        </div>
+      </>
     );
   }
 
@@ -40,6 +53,7 @@ function PackageList({ packages, loading, onDelete }) {
 
   return (
     <div className="fade-in">
+      <Hero />
       <div style={{ marginBottom: '2rem' }}>
         <h1>Keyboard Shortcut Packages</h1>
         <p>Discover and share custom keyboard shortcut collections</p>

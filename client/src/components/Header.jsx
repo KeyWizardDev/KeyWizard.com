@@ -14,8 +14,8 @@ function Header() {
     <header className="header">
       <div className="container">
         <div className="header-content">
-          <Link to="/" className="logo">
-            <Package size={24} style={{ marginRight: '0.5rem' }} />
+          <Link to="/" className="logo" style={{ fontFamily: 'Inter, Segoe UI, sans-serif', letterSpacing: '-1px', fontWeight: 800 }}>
+            <img src="/logo.png" alt="KeyWizard Logo" style={{ width: 36, height: 36, marginRight: 10, borderRadius: 8, background: '#fffdfa', boxShadow: '0 2px 8px rgba(44,39,33,0.10)' }} />
             KeyWizard
           </Link>
           <nav className="nav">
