@@ -26,34 +26,6 @@ Platform for users to share and add custom keyboard shortcut packages to their K
 - **Socket.io Client** for real-time updates
 - **Lucide React** for beautiful icons
 
-## 📦 Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd KeyWizard.com
-   ```
-
-2. **Install dependencies**
-   ```bash
-   # Install backend dependencies
-   npm install
-   
-   # Install frontend dependencies
-   cd client
-   npm install
-   cd ..
-   ```
-
-3. **Start the development servers**
-   ```bash
-   # Start both backend and frontend (recommended)
-   npm run dev
-   
-   # Or start them separately:
-   npm run server    # Backend on port 3000
-   npm run client    # Frontend on port 5173
-   ```
 
 ## 🎯 Usage
 
