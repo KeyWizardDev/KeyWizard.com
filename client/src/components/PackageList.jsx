@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, Trash2, Edit, Download, Star, User } from 'lucide-react';
+import { ExternalLink, Trash2, Edit, Download, Star, User, Clipboard } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useState } from 'react';
+import Toast from './Toast';
 
 function PackageList({ packages, loading, onDelete }) {
   const { user } = useAuth();
+  const [toast, setToast] = useState(null);
 
   if (loading) {
     return (
@@ -49,6 +52,41 @@ function PackageList({ packages, loading, onDelete }) {
     if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
       await onDelete(id);
     }
+  };
+
+  // Copy JSON to clipboard
+  const handleCopyJson = (pkg) => {
+    let shortcuts = [];
+    try {
+      shortcuts = JSON.parse(pkg.shortcuts || '[]');
+    } catch (e) {}
+    const json = JSON.stringify({
+      Name: pkg.name,
+      Shortcuts: shortcuts.map(s => {
+        // Normalize keys to always be an array of uppercase strings
+        let keys = [];
+        if (Array.isArray(s.keys)) {
+          keys = s.keys;
+        } else if (typeof s.key === 'string') {
+          keys = s.key.split(/\+|\s+/).map(k => k.trim()).filter(Boolean);
+        } else if (typeof s.keys === 'string') {
+          keys = s.keys.split(/\+|\s+/).map(k => k.trim()).filter(Boolean);
+        }
+        // Uppercase and trim all keys
+        keys = keys.map(k => k.trim().toUpperCase());
+        return {
+          Description: s.description || s.desc || '',
+          Keys: keys
+        };
+      })
+    }, null, 4);
+    navigator.clipboard.writeText(json).then(() => {
+      setToast({ message: 'Copied JSON to clipboard!', type: 'success' });
+      setTimeout(() => setToast(null), 2000);
+    }, () => {
+      setToast({ message: 'Failed to copy JSON', type: 'error' });
+      setTimeout(() => setToast(null), 2000);
+    });
   };
 
   return (
@@ -133,6 +171,15 @@ function PackageList({ packages, loading, onDelete }) {
                   <ExternalLink size={16} style={{ marginRight: '0.5rem' }} />
                   View Details
                 </Link>
+                <button
+                  className="btn btn-secondary"
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                  onClick={() => handleCopyJson(pkg)}
+                  title="Copy JSON to clipboard"
+                >
+                  <Clipboard size={16} />
+                  Copy JSON
+                </button>
                 {isOwner && (
                   <Link to={`/package/${pkg.id}?edit=true`} className="btn btn-secondary">
                     <Edit size={16} style={{ marginRight: '0.5rem' }} />
@@ -144,6 +191,7 @@ function PackageList({ packages, loading, onDelete }) {
           );
         })}
       </div>
+      {toast && <Toast {...toast} />}
     </div>
   );
 }
