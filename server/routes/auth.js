@@ -5,7 +5,7 @@ const sqlite3 = require('sqlite3').verbose();
 const { requireAuth, getUserById } = require('../middleware/auth');
 
 const router = express.Router();
-const db = new sqlite3.Database('./server/database.sqlite');
+const db = new sqlite3.Database(process.env.DATABASE_PATH || './server/database.sqlite');
 
 // Google OAuth routes
 router.get('/google',

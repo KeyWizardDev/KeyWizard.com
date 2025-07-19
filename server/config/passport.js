@@ -2,7 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const sqlite3 = require('sqlite3').verbose();
 
-const db = new sqlite3.Database('./server/database.sqlite');
+const db = new sqlite3.Database(process.env.DATABASE_PATH || './server/database.sqlite');
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,

@@ -53,7 +53,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Database setup
-const db = new sqlite3.Database('./server/database.sqlite', (err) => {
+const db = new sqlite3.Database(process.env.DATABASE_PATH || './server/database.sqlite', (err) => {
   if (err) {
     console.error('Error opening database:', err.message);
   } else {

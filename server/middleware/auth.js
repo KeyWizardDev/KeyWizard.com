@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3').verbose();
 
 // Database connection
-const db = new sqlite3.Database('./server/database.sqlite');
+const db = new sqlite3.Database(process.env.DATABASE_PATH || './server/database.sqlite');
 
 // Middleware to check if user is authenticated
 const requireAuth = (req, res, next) => {
