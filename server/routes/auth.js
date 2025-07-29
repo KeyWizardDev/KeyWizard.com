@@ -47,8 +47,36 @@ router.get('/me', requireAuth, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+    
+    // Debug logging
+    console.log('User data from /api/auth/me:', user);
+    
     res.json(user);
   } catch (error) {
+    console.error('Error in /api/auth/me:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Debug endpoint to check user data
+router.get('/debug/user/:id', async (req, res) => {
+  try {
+    const user = await getUserById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    console.log('Debug user data:', user);
+    res.json({
+      user,
+      debug: {
+        hasAvatarUrl: !!user.avatar_url,
+        avatarUrlLength: user.avatar_url ? user.avatar_url.length : 0,
+        avatarUrlPreview: user.avatar_url ? user.avatar_url.substring(0, 50) + '...' : 'null'
+      }
+    });
+  } catch (error) {
+    console.error('Error in debug endpoint:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });

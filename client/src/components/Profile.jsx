@@ -3,10 +3,23 @@ import { useAuth } from '../contexts/AuthContext';
 import { ArrowLeft, User, Calendar, Package, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+// Utility function to validate avatar URL
+const validateAvatarUrl = (url) => {
+  if (!url) return null;
+  
+  // Ensure HTTPS for Google avatar URLs
+  if (url.startsWith('http://')) {
+    return url.replace('http://', 'https://');
+  }
+  
+  return url;
+};
+
 function Profile() {
   const { user, logout } = useAuth();
   const [userPackages, setUserPackages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -32,9 +45,21 @@ function Profile() {
     await logout();
   };
 
+  const handleImageError = () => {
+    console.log('Profile image failed to load, falling back to default avatar');
+    setImageError(true);
+  };
+
   if (!user) {
     return null;
   }
+
+  // Debug logging
+  console.log('User data in Profile:', user);
+  
+  // Get validated avatar URL
+  const avatarUrl = validateAvatarUrl(user.avatar_url);
+  const displayName = user.username || user.displayName || 'User';
 
   return (
     <div className="fade-in">
@@ -47,16 +72,17 @@ function Profile() {
 
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-          {user.avatar_url ? (
+          {avatarUrl && !imageError ? (
             <img 
-              src={user.avatar_url} 
-              alt={user.username}
+              src={avatarUrl} 
+              alt={displayName}
               style={{ 
                 width: '80px', 
                 height: '80px', 
                 borderRadius: '50%',
                 border: '3px solid rgba(255,255,255,0.2)'
               }}
+              onError={handleImageError}
             />
           ) : (
             <div style={{ 
@@ -73,7 +99,7 @@ function Profile() {
             </div>
           )}
           <div>
-            <h1 style={{ margin: '0 0 0.5rem 0' }}>{user.username}</h1>
+            <h1 style={{ margin: '0 0 0.5rem 0' }}>{displayName}</h1>
             <p style={{ margin: '0 0 0.5rem 0', opacity: 0.8 }}>{user.email}</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', opacity: 0.7 }}>
               <Calendar size={14} />

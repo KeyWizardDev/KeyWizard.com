@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Home, Package, User, LogIn } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
+// Utility function to validate avatar URL
+const validateAvatarUrl = (url) => {
+  if (!url) return null;
+  
+  // Ensure HTTPS for Google avatar URLs
+  if (url.startsWith('http://')) {
+    return url.replace('http://', 'https://');
+  }
+  
+  return url;
+};
+
 function Header() {
   const { user, logout } = useAuth();
+  const [imageError, setImageError] = useState(false);
 
   const handleLogout = async () => {
     await logout();
   };
+
+  const handleImageError = () => {
+    console.log('Header image failed to load, falling back to default avatar');
+    setImageError(true);
+  };
+
+  // Get validated avatar URL and display name
+  const avatarUrl = user ? validateAvatarUrl(user.avatar_url) : null;
+  const displayName = user ? (user.username || user.displayName || 'User') : 'User';
 
   return (
     <header className="header">
@@ -31,21 +53,22 @@ function Header() {
                   Create Package
                 </Link>
                 <Link to="/profile" className="btn btn-secondary">
-                  {user.avatar_url ? (
+                  {avatarUrl && !imageError ? (
                     <img 
-                      src={user.avatar_url} 
-                      alt={user.username}
+                      src={avatarUrl} 
+                      alt={displayName}
                       style={{ 
                         width: '20px', 
                         height: '20px', 
                         borderRadius: '50%',
                         marginRight: '0.5rem'
                       }}
+                      onError={handleImageError}
                     />
                   ) : (
                     <User size={16} style={{ marginRight: '0.5rem' }} />
                   )}
-                  {user.username}
+                  {displayName}
                 </Link>
                 <button onClick={handleLogout} className="btn btn-secondary">
                   <LogIn size={16} style={{ marginRight: '0.5rem' }} />

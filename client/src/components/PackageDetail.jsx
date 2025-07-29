@@ -1,58 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit, Save, X, Download, Star, Trash2, User } from 'lucide-react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { ArrowLeft, Edit, Trash2, Download, Star, User, X, Plus } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+
+// Utility function to validate avatar URL
+const validateAvatarUrl = (url) => {
+  if (!url) return null;
+  
+  // Ensure HTTPS for Google avatar URLs
+  if (url.startsWith('http://')) {
+    return url.replace('http://', 'https://');
+  }
+  
+  return url;
+};
 
 function PackageDetail({ packages, onUpdate, onDelete }) {
   const { id } = useParams();
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
-  const [isEditing, setIsEditing] = useState(searchParams.get('edit') === 'true');
-  const [loading, setLoading] = useState(false);
-  
-  const pkg = packages.find(p => p.id === parseInt(id));
-  const isOwner = user && pkg && pkg.author_id === user.id;
-  
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    category: '',
-    shortcuts: []
-  });
+  const [isEditing, setIsEditing] = useState(location.search.includes('edit=true'));
+  const [imageError, setImageError] = useState(false);
+  const [shortcuts, setShortcuts] = useState([]);
 
+  const pkg = packages.find(p => p.id == id);
+  
+  // Initialize shortcuts when package loads
   useEffect(() => {
     if (pkg) {
-      setFormData({
-        name: pkg.name,
-        description: pkg.description || '',
-        category: pkg.category || '',
-        shortcuts: JSON.parse(pkg.shortcuts || '[]')
-      });
+      setShortcuts(JSON.parse(pkg.shortcuts || '[]'));
     }
   }, [pkg]);
-
+  
   if (!pkg) {
     return (
-      <div className="card fade-in">
-        <h2>Package not found</h2>
-        <p>The package you're looking for doesn't exist.</p>
-        <button onClick={() => navigate('/')} className="btn">
-          <ArrowLeft size={16} style={{ marginRight: '0.5rem' }} />
-          Back to Packages
-        </button>
+      <div className="fade-in">
+        <div style={{ marginBottom: '2rem' }}>
+          <button onClick={() => navigate('/')} className="btn btn-secondary">
+            <ArrowLeft size={16} style={{ marginRight: '0.5rem' }} />
+            Back to Packages
+          </button>
+        </div>
+        <div className="card">
+          <h2>Package not found</h2>
+          <p>The package you're looking for doesn't exist.</p>
+        </div>
       </div>
     );
   }
 
+  const isOwner = user && pkg.author_id === user.id;
+  const authorAvatarUrl = validateAvatarUrl(pkg.author_avatar);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   const handleSave = async () => {
-    setLoading(true);
-    const success = await onUpdate(pkg.id, formData);
+    const updatedPackage = {
+      ...pkg,
+      shortcuts: shortcuts
+    };
+    
+    const success = await onUpdate(updatedPackage);
     if (success) {
       setIsEditing(false);
-      navigate(`/package/${pkg.id}`);
     }
-    setLoading(false);
   };
 
   const handleDelete = async () => {
@@ -65,29 +79,18 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
   };
 
   const addShortcut = () => {
-    setFormData(prev => ({
-      ...prev,
-      shortcuts: [...prev.shortcuts, { key: '', action: '', description: '' }]
-    }));
+    setShortcuts([...shortcuts, { key: '', action: '', description: '' }]);
   };
 
   const updateShortcut = (index, field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      shortcuts: prev.shortcuts.map((shortcut, i) => 
-        i === index ? { ...shortcut, [field]: value } : shortcut
-      )
-    }));
+    const newShortcuts = [...shortcuts];
+    newShortcuts[index][field] = value;
+    setShortcuts(newShortcuts);
   };
 
   const removeShortcut = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      shortcuts: prev.shortcuts.filter((_, i) => i !== index)
-    }));
+    setShortcuts(shortcuts.filter((_, i) => i !== index));
   };
-
-  const shortcuts = JSON.parse(pkg.shortcuts || '[]');
 
   return (
     <div className="fade-in">
@@ -100,68 +103,54 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
 
       <div className="card">
         {isEditing ? (
-          // Edit Form
+          // Edit Mode
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
               <h1>Edit Package</h1>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button onClick={handleSave} className="btn" disabled={loading}>
-                  <Save size={16} style={{ marginRight: '0.5rem' }} />
-                  {loading ? 'Saving...' : 'Save'}
-                </button>
                 <button onClick={() => setIsEditing(false)} className="btn btn-secondary">
-                  <X size={16} style={{ marginRight: '0.5rem' }} />
                   Cancel
                 </button>
+                <button onClick={handleSave} className="btn">
+                  Save Changes
+                </button>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gap: '1rem', marginBottom: '2rem' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem' }}>Package Name</label>
-                <input
-                  type="text"
-                  className="input"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Enter package name"
-                />
-              </div>
-              
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem' }}>Description</label>
-                <textarea
-                  className="input"
-                  value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Describe your shortcut package"
-                  rows="3"
-                />
-              </div>
-              
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem' }}>Category</label>
-                <input
-                  type="text"
-                  className="input"
-                  value={formData.category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  placeholder="e.g., Development, Design"
-                />
-              </div>
+            <div style={{ marginBottom: '2rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Name</label>
+              <input
+                type="text"
+                className="input"
+                value={pkg.name}
+                readOnly
+                style={{ opacity: 0.7 }}
+              />
             </div>
 
-            <div>
+            <div style={{ marginBottom: '2rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Description</label>
+              <input
+                type="text"
+                className="input"
+                value={pkg.description}
+                readOnly
+                style={{ opacity: 0.7 }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '2rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <h3>Shortcuts</h3>
+                <label style={{ fontWeight: '600' }}>Shortcuts</label>
                 <button onClick={addShortcut} className="btn btn-secondary">
+                  <Plus size={16} style={{ marginRight: '0.5rem' }} />
                   Add Shortcut
                 </button>
               </div>
               
-              {formData.shortcuts.map((shortcut, index) => (
-                <div key={index} className="shortcut-item">
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr auto', gap: '1rem', width: '100%' }}>
+              <div style={{ display: 'grid', gap: '1rem' }}>
+                {shortcuts.map((shortcut, index) => (
+                  <div key={index} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: '0.5rem', alignItems: 'center' }}>
                     <input
                       type="text"
                       className="input"
@@ -190,8 +179,8 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
                       <X size={16} />
                     </button>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         ) : (
@@ -203,15 +192,16 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
                 <p style={{ margin: '0 0 1rem 0', opacity: 0.8, fontSize: '1.1rem' }}>{pkg.description}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', opacity: 0.7 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    {pkg.author_avatar ? (
+                    {authorAvatarUrl && !imageError ? (
                       <img 
-                        src={pkg.author_avatar} 
-                        alt={pkg.author_username}
+                        src={authorAvatarUrl} 
+                        alt={pkg.author_username || pkg.author_name}
                         style={{ 
                           width: '16px', 
                           height: '16px', 
                           borderRadius: '50%'
                         }}
+                        onError={handleImageError}
                       />
                     ) : (
                       <User size={14} />

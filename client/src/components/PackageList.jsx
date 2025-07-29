@@ -5,9 +5,26 @@ import { useAuth } from '../contexts/AuthContext';
 import { useState } from 'react';
 import Toast from './Toast';
 
+// Utility function to validate avatar URL
+const validateAvatarUrl = (url) => {
+  if (!url) return null;
+  
+  // Ensure HTTPS for Google avatar URLs
+  if (url.startsWith('http://')) {
+    return url.replace('http://', 'https://');
+  }
+  
+  return url;
+};
+
 function PackageList({ packages, loading, onDelete }) {
   const { user } = useAuth();
   const [toast, setToast] = useState(null);
+  const [imageErrors, setImageErrors] = useState(new Set());
+
+  const handleImageError = (authorId) => {
+    setImageErrors(prev => new Set(prev).add(authorId));
+  };
 
   if (loading) {
     return (
@@ -60,26 +77,14 @@ function PackageList({ packages, loading, onDelete }) {
     try {
       shortcuts = JSON.parse(pkg.shortcuts || '[]');
     } catch (e) {}
+    
     const json = JSON.stringify({
-      Name: pkg.name,
-      Shortcuts: shortcuts.map(s => {
-        // Normalize keys to always be an array of uppercase strings
-        let keys = [];
-        if (Array.isArray(s.keys)) {
-          keys = s.keys;
-        } else if (typeof s.key === 'string') {
-          keys = s.key.split(/\+|\s+/).map(k => k.trim()).filter(Boolean);
-        } else if (typeof s.keys === 'string') {
-          keys = s.keys.split(/\+|\s+/).map(k => k.trim()).filter(Boolean);
-        }
-        // Uppercase and trim all keys
-        keys = keys.map(k => k.trim().toUpperCase());
-        return {
-          Description: s.description || s.desc || '',
-          Keys: keys
-        };
-      })
-    }, null, 4);
+      name: pkg.name,
+      description: pkg.description,
+      category: pkg.category,
+      shortcuts: shortcuts
+    }, null, 2);
+    
     navigator.clipboard.writeText(json).then(() => {
       setToast({ message: 'Copied JSON to clipboard!', type: 'success' });
       setTimeout(() => setToast(null), 2000);
@@ -101,6 +106,8 @@ function PackageList({ packages, loading, onDelete }) {
         {packages.map((pkg) => {
           const shortcuts = JSON.parse(pkg.shortcuts || '[]');
           const isOwner = user && pkg.author_id === user.id;
+          const authorAvatarUrl = validateAvatarUrl(pkg.author_avatar);
+          const hasImageError = imageErrors.has(pkg.author_id);
           
           return (
             <div key={pkg.id} className="card">
@@ -110,15 +117,16 @@ function PackageList({ packages, loading, onDelete }) {
                   <p style={{ margin: '0 0 0.5rem 0', opacity: 0.8 }}>{pkg.description}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', opacity: 0.7 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      {pkg.author_avatar ? (
+                      {authorAvatarUrl && !hasImageError ? (
                         <img 
-                          src={pkg.author_avatar} 
-                          alt={pkg.author_username}
+                          src={authorAvatarUrl} 
+                          alt={pkg.author_username || pkg.author_name}
                           style={{ 
                             width: '16px', 
                             height: '16px', 
                             borderRadius: '50%'
                           }}
+                          onError={() => handleImageError(pkg.author_id)}
                         />
                       ) : (
                         <User size={14} />
