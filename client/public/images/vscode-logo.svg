@@ -5,7 +5,10 @@
       <stop offset="100%" style="stop-color:#005A9E;stop-opacity:1" />
     </linearGradient>
   </defs>
-  <path d="M181.534 254.252c-6.776 2.33-14.34 1.23-19.73-2.97L100.5 200.5l-30.5 30.5c-8.5 8.5-22.5 8.5-31 0s-8.5-22.5 0-31l30.5-30.5-50.8-50.8c-4.2-5.39-5.3-12.95-2.97-19.73 2.33-6.78 7.95-11.5 14.77-12.5l120-20c6.5-1.1 12.9 1.8 16.5 7.5l40 60c3.6 5.7 3.6 12.8 0 18.5l-40 60c-3.6 5.7-10 8.6-16.5 7.5l-120-20c-6.82-1-12.44-5.72-14.77-12.5z" fill="url(#grad1)"/>
-  <path d="M120 140l-20-30 20-30" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <path d="M160 140l-20-30 20-30" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Main V shape (right side) -->
+  <path d="M180 60 L140 120 L180 180 L160 180 L120 120 L160 60 Z" fill="url(#grad1)"/>
+  <!-- X shape (left side) that goes behind -->
+  <path d="M100 80 L80 100 L100 120 L80 140 L100 160 L120 140 L100 120 L120 100 Z" fill="url(#grad1)" opacity="0.8"/>
+  <!-- Highlight for 3D effect -->
+  <path d="M180 60 L140 120 L180 180" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.4"/>
 </svg> 

@@ -5,6 +5,8 @@
       <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
     </linearGradient>
   </defs>
+  <!-- Background with rounded corners -->
   <rect width="256" height="256" rx="20" fill="url(#bg)"/>
+  <!-- "Ps" text centered -->
   <text x="128" y="140" font-family="Arial, sans-serif" font-size="80" font-weight="bold" text-anchor="middle" fill="#00A8FF">Ps</text>
 </svg> 
