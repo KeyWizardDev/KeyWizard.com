@@ -149,7 +149,7 @@ function PackageList({ packages, loading, onDelete }) {
                 }}>
                   {pkg.image_url ? (
                     <img 
-                      src={pkg.image_url} 
+                      src={`${pkg.image_url}?v=2`} 
                       alt={pkg.name}
                       style={{
                         width: '100%',
