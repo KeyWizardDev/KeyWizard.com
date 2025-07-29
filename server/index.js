@@ -71,6 +71,10 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/dist')));
 }
 
+// Serve uploaded images in both development and production
+app.use('/images/uploads', express.static(path.join(__dirname, '../client/public/images/uploads')));
+app.use('/images', express.static(path.join(__dirname, '../client/public/images')));
+
 // Session configuration
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
