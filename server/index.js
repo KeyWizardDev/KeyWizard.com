@@ -84,12 +84,44 @@ function initDatabase() {
       author_name TEXT NOT NULL,
       category TEXT,
       shortcuts TEXT NOT NULL,
+      image_url TEXT,
       downloads INTEGER DEFAULT 0,
       rating REAL DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE
     )`);
+
+    // Add image_url column to existing tables if it doesn't exist
+    db.run(`ALTER TABLE shortcut_packages ADD COLUMN image_url TEXT`, (err) => {
+      if (err && !err.message.includes('duplicate column name')) {
+        console.error('Error adding image_url column:', err.message);
+      }
+    });
+
+    // Update existing VS Code package with new logo
+    db.run(`UPDATE shortcut_packages SET image_url = ? WHERE name LIKE '%VS Code%'`, 
+      ['https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg'], 
+      (err) => {
+        if (err) {
+          console.error('Error updating VS Code package:', err.message);
+        } else {
+          console.log('Updated VS Code package with new logo');
+        }
+      }
+    );
+
+    // Update existing Photoshop package with new logo
+    db.run(`UPDATE shortcut_packages SET image_url = ? WHERE name LIKE '%Photoshop%'`, 
+      ['https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg'], 
+      (err) => {
+        if (err) {
+          console.error('Error updating Photoshop package:', err.message);
+        } else {
+          console.log('Updated Photoshop package with new logo');
+        }
+      }
+    );
 
     // Insert sample data only if no packages exist
     db.get('SELECT COUNT(*) as count FROM shortcut_packages', (err, row) => {
@@ -118,6 +150,7 @@ function initDatabase() {
                 author_id: sampleUserId,
                 author_name: "DevMaster",
                 category: "Development",
+                image_url: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg",
                 shortcuts: JSON.stringify([
                   { key: "Ctrl+Shift+P", action: "Command Palette", description: "Open command palette" },
                   { key: "Ctrl+P", action: "Quick Open", description: "Quick file navigation" },
@@ -130,6 +163,7 @@ function initDatabase() {
                 author_id: sampleUserId,
                 author_name: "DevMaster",
                 category: "Design",
+                image_url: "https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg",
                 shortcuts: JSON.stringify([
                   { key: "Ctrl+Z", action: "Undo", description: "Undo last action" },
                   { key: "Ctrl+Shift+Z", action: "Redo", description: "Redo last action" },
@@ -139,10 +173,10 @@ function initDatabase() {
             ];
 
             const insertStmt = db.prepare(`INSERT INTO shortcut_packages 
-              (name, description, author_id, author_name, category, shortcuts) VALUES (?, ?, ?, ?, ?, ?)`);
+              (name, description, author_id, author_name, category, image_url, shortcuts) VALUES (?, ?, ?, ?, ?, ?, ?)`);
             
             samplePackages.forEach(pkg => {
-              insertStmt.run(pkg.name, pkg.description, pkg.author_id, pkg.author_name, pkg.category, pkg.shortcuts);
+              insertStmt.run(pkg.name, pkg.description, pkg.author_id, pkg.author_name, pkg.category, pkg.image_url, pkg.shortcuts);
             });
             insertStmt.finalize();
           }
@@ -185,7 +219,7 @@ app.get('/api/packages/:id', optionalAuth, (req, res) => {
 });
 
 app.post('/api/packages', requireAuth, (req, res) => {
-  const { name, description, category, shortcuts } = req.body;
+  const { name, description, category, shortcuts, image_url } = req.body;
   
   if (!name || !shortcuts) {
     res.status(400).json({ error: 'Missing required fields' });
@@ -195,8 +229,8 @@ app.post('/api/packages', requireAuth, (req, res) => {
   const shortcutsJson = JSON.stringify(shortcuts);
   
   db.run(
-    'INSERT INTO shortcut_packages (name, description, author_id, author_name, category, shortcuts) VALUES (?, ?, ?, ?, ?, ?)',
-    [name, description, req.user.id, req.user.username, category, shortcutsJson],
+    'INSERT INTO shortcut_packages (name, description, author_id, author_name, category, image_url, shortcuts) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [name, description, req.user.id, req.user.username, category, image_url || null, shortcutsJson],
     function(err) {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -219,12 +253,12 @@ app.post('/api/packages', requireAuth, (req, res) => {
 });
 
 app.put('/api/packages/:id', requireAuth, checkPackageOwnership, (req, res) => {
-  const { name, description, category, shortcuts } = req.body;
+  const { name, description, category, shortcuts, image_url } = req.body;
   const shortcutsJson = JSON.stringify(shortcuts);
   
   db.run(
-    'UPDATE shortcut_packages SET name = ?, description = ?, category = ?, shortcuts = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-    [name, description, category, shortcutsJson, req.params.id],
+    'UPDATE shortcut_packages SET name = ?, description = ?, category = ?, image_url = ?, shortcuts = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+    [name, description, category, image_url || null, shortcutsJson, req.params.id],
     function(err) {
       if (err) {
         res.status(500).json({ error: err.message });

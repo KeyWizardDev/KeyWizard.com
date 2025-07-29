@@ -60,7 +60,8 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
   const handleSave = async () => {
     const updatedPackage = {
       ...pkg,
-      shortcuts: shortcuts
+      shortcuts: shortcuts,
+      image_url: pkg.image_url // Preserve the existing image_url
     };
     
     const success = await onUpdate(updatedPackage);
@@ -137,6 +138,27 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
                 readOnly
                 style={{ opacity: 0.7 }}
               />
+            </div>
+
+            <div style={{ marginBottom: '2rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Image URL</label>
+              <input
+                type="url"
+                className="input"
+                value={pkg.image_url || ''}
+                onChange={(e) => {
+                  const updatedPkg = { ...pkg, image_url: e.target.value };
+                  // Update the package in the packages array
+                  const packageIndex = packages.findIndex(p => p.id === pkg.id);
+                  if (packageIndex !== -1) {
+                    packages[packageIndex] = updatedPkg;
+                  }
+                }}
+                placeholder="https://example.com/image.jpg (optional)"
+              />
+              <p style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '0.25rem' }}>
+                Add a relevant image to make your package stand out. Recommended size: 400x300px
+              </p>
             </div>
 
             <div style={{ marginBottom: '2rem' }}>

@@ -9,6 +9,7 @@ function CreatePackage({ onCreate }) {
     name: '',
     description: '',
     category: '',
+    image_url: '',
     shortcuts: [{ key: '', action: '', description: '' }]
   });
 
@@ -110,6 +111,20 @@ function CreatePackage({ onCreate }) {
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
                 placeholder="e.g., Development, Design, Productivity"
               />
+            </div>
+            
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>Package Image URL</label>
+              <input
+                type="url"
+                className="input"
+                value={formData.image_url}
+                onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
+                placeholder="https://example.com/image.jpg (optional)"
+              />
+              <p style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '0.25rem' }}>
+                Add a relevant image to make your package stand out. Recommended size: 400x300px
+              </p>
             </div>
           </div>
 

@@ -102,100 +102,181 @@ function PackageList({ packages, loading, onDelete }) {
         <p>Discover and share custom keyboard shortcut collections</p>
       </div>
       
-      <div className="grid">
+      <div className="grid" style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+        gap: '1.5rem' 
+      }}>
         {packages.map((pkg) => {
           const shortcuts = JSON.parse(pkg.shortcuts || '[]');
           const isOwner = user && pkg.author_id === user.id;
-          const authorAvatarUrl = validateAvatarUrl(pkg.author_avatar);
-          const hasImageError = imageErrors.has(pkg.author_id);
           
           return (
-            <div key={pkg.id} className="card">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                <div>
-                  <h3 style={{ margin: '0 0 0.5rem 0' }}>{pkg.name}</h3>
-                  <p style={{ margin: '0 0 0.5rem 0', opacity: 0.8 }}>{pkg.description}</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', opacity: 0.7 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      {authorAvatarUrl && !hasImageError ? (
-                        <img 
-                          src={authorAvatarUrl} 
-                          alt={pkg.author_username || pkg.author_name}
-                          style={{ 
-                            width: '16px', 
-                            height: '16px', 
-                            borderRadius: '50%'
-                          }}
-                          onError={() => handleImageError(pkg.author_id)}
-                        />
-                      ) : (
-                        <User size={14} />
-                      )}
-                      <span>By {pkg.author_username || pkg.author_name}</span>
-                    </div>
-                    {pkg.category && <span>• {pkg.category}</span>}
+            <Link 
+              key={pkg.id} 
+              to={`/package/${pkg.id}`}
+              style={{ 
+                textDecoration: 'none', 
+                color: 'inherit',
+                display: 'block'
+              }}
+            >
+              <div className="card" style={{
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+              }}
+              >
+                {/* Package Image */}
+                <div style={{
+                  height: '200px',
+                  background: '#ffffff',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  {pkg.image_url ? (
+                    <img 
+                      src={pkg.image_url} 
+                      alt={pkg.name}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        objectPosition: 'center',
+                        padding: pkg.name.toLowerCase().includes('vscode') ? '20px' : '0px'
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div style={{
+                    display: pkg.image_url ? 'none' : 'flex',
+                    width: '100%',
+                    height: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: '#ffffff',
+                    color: '#6d665b',
+                    fontSize: '3rem',
+                    opacity: 0.8
+                  }}>
+                    ⌨️
                   </div>
-                </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  
+                  {/* Owner delete button overlay */}
                   {isOwner && (
                     <button
-                      onClick={() => handleDelete(pkg.id, pkg.name)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.7)' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleDelete(pkg.id, pkg.name);
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        background: 'rgba(0,0,0,0.6)',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '32px',
+                        height: '32px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        color: 'white',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(220,38,38,0.8)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(0,0,0,0.6)';
+                      }}
                       title="Delete package"
                     >
                       <Trash2 size={16} />
                     </button>
                   )}
                 </div>
-              </div>
-              
-              <div style={{ marginBottom: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                  <Download size={14} />
-                  <span style={{ fontSize: '0.9rem' }}>{pkg.downloads || 0} downloads</span>
-                  <Star size={14} />
-                  <span style={{ fontSize: '0.9rem' }}>{pkg.rating || 0} rating</span>
+                
+                {/* Package Info */}
+                <div style={{
+                  padding: '1rem',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}>
+                  <div>
+                    <h3 style={{ 
+                      margin: '0 0 0.5rem 0',
+                      fontSize: '1.2rem',
+                      fontWeight: '600',
+                      color: '#232323'
+                    }}>
+                      {pkg.name}
+                    </h3>
+                    
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.85rem',
+                      color: '#6d665b',
+                      marginBottom: '0.5rem'
+                    }}>
+                      <span>• {shortcuts.length} shortcuts</span>
+                      {pkg.category && <span>• {pkg.category}</span>}
+                    </div>
+                  </div>
+                  
+                  {/* Quick action buttons */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '0.5rem',
+                    marginTop: 'auto'
+                  }}>
+                    <button
+                      className="btn btn-secondary"
+                      style={{
+                        flex: 1,
+                        fontSize: '0.85rem',
+                        padding: '0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.25rem'
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleCopyJson(pkg);
+                      }}
+                      title="Copy JSON to clipboard"
+                    >
+                      <Clipboard size={14} />
+                      Copy JSON
+                    </button>
+                  </div>
                 </div>
               </div>
-              
-              <div style={{ marginBottom: '1rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Shortcuts ({shortcuts.length})</h4>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
-                  {shortcuts.slice(0, 3).map((shortcut, index) => (
-                    <span key={index} className="shortcut-key">
-                      {shortcut.key}
-                    </span>
-                  ))}
-                  {shortcuts.length > 3 && (
-                    <span style={{ opacity: 0.7, fontSize: '0.9rem' }}>
-                      +{shortcuts.length - 3} more
-                    </span>
-                  )}
-                </div>
-              </div>
-              
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <Link to={`/package/${pkg.id}`} className="btn">
-                  <ExternalLink size={16} style={{ marginRight: '0.5rem' }} />
-                  View Details
-                </Link>
-                <button
-                  className="btn btn-secondary"
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                  onClick={() => handleCopyJson(pkg)}
-                  title="Copy JSON to clipboard"
-                >
-                  <Clipboard size={16} />
-                  Copy JSON
-                </button>
-                {isOwner && (
-                  <Link to={`/package/${pkg.id}?edit=true`} className="btn btn-secondary">
-                    <Edit size={16} style={{ marginRight: '0.5rem' }} />
-                    Edit
-                  </Link>
-                )}
-              </div>
-            </div>
+            </Link>
           );
         })}
       </div>
