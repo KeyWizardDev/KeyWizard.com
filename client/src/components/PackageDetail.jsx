@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Edit, Trash2, Download, Star, User, X, Plus } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, Download, Star, User, X, Plus, Upload, Image as ImageIcon } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 // Utility function to validate avatar URL
@@ -20,9 +20,14 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
+  const fileInputRef = useRef(null);
   const [isEditing, setIsEditing] = useState(location.search.includes('edit=true'));
   const [imageError, setImageError] = useState(false);
   const [shortcuts, setShortcuts] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const pkg = packages.find(p => p.id == id);
   
@@ -93,6 +98,110 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
     setShortcuts(shortcuts.filter((_, i) => i !== index));
   };
 
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileInput = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      handleFile(e.target.files[0]);
+    }
+  };
+
+  const handleFile = async (file) => {
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
+    setSelectedImage(file);
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreview(e.target.result);
+    };
+    reader.readAsDataURL(file);
+
+    // Upload the file
+    await uploadImage(file);
+  };
+
+  const uploadImage = async (file) => {
+    setUploading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Upload failed');
+      }
+
+      const result = await response.json();
+      
+      // Update the package with new image URL
+      const updatedPkg = { ...pkg, image_url: result.imagePath };
+      const packageIndex = packages.findIndex(p => p.id === pkg.id);
+      if (packageIndex !== -1) {
+        packages[packageIndex] = updatedPkg;
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload image: ' + error.message);
+      setSelectedImage(null);
+      setImagePreview(null);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    
+    // Update the package to remove image URL
+    const updatedPkg = { ...pkg, image_url: '' };
+    const packageIndex = packages.findIndex(p => p.id === pkg.id);
+    if (packageIndex !== -1) {
+      packages[packageIndex] = updatedPkg;
+    }
+    
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <div className="fade-in">
       <div style={{ marginBottom: '2rem' }}>
@@ -141,22 +250,108 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
             </div>
 
             <div style={{ marginBottom: '2rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Image URL</label>
-              <input
-                type="url"
-                className="input"
-                value={pkg.image_url || ''}
-                onChange={(e) => {
-                  const updatedPkg = { ...pkg, image_url: e.target.value };
-                  // Update the package in the packages array
-                  const packageIndex = packages.findIndex(p => p.id === pkg.id);
-                  if (packageIndex !== -1) {
-                    packages[packageIndex] = updatedPkg;
-                  }
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Package Image</label>
+              <div
+                style={{
+                  border: dragActive ? '2px dashed #007acc' : '2px dashed rgba(255,255,255,0.3)',
+                  borderRadius: '8px',
+                  padding: '2rem',
+                  textAlign: 'center',
+                  backgroundColor: dragActive ? 'rgba(0,122,204,0.1)' : 'rgba(255,255,255,0.05)',
+                  transition: 'all 0.2s ease',
+                  cursor: 'pointer',
+                  position: 'relative'
                 }}
-                placeholder="https://example.com/image.jpg (optional)"
-              />
-              <p style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '0.25rem' }}>
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileInput}
+                  style={{ display: 'none' }}
+                />
+                
+                {imagePreview ? (
+                  <div style={{ position: 'relative' }}>
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '200px',
+                        borderRadius: '8px',
+                        objectFit: 'contain'
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeImage();
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: '-8px',
+                        right: '-8px',
+                        background: '#ff6b6b',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '24px',
+                        height: '24px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '12px'
+                      }}
+                      title="Remove image"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                ) : pkg.image_url ? (
+                  <div style={{ position: 'relative' }}>
+                    <img
+                      src={pkg.image_url}
+                      alt="Current package image"
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '200px',
+                        borderRadius: '8px',
+                        objectFit: 'contain'
+                      }}
+                    />
+                    <div style={{ marginTop: '1rem' }}>
+                      <p style={{ fontSize: '0.9rem', opacity: 0.7 }}>
+                        Click to replace or drag a new image
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <Upload size={48} style={{ marginBottom: '1rem', opacity: 0.7 }} />
+                    <p style={{ marginBottom: '0.5rem', fontSize: '1.1rem' }}>
+                      {uploading ? 'Uploading...' : 'Drag & drop an image here'}
+                    </p>
+                    <p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1rem' }}>
+                      or click to browse
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', opacity: 0.6 }}>
+                      <ImageIcon size={16} />
+                      <span style={{ fontSize: '0.85rem' }}>
+                        PNG, JPG, GIF up to 5MB
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <p style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '0.5rem' }}>
                 Add a relevant image to make your package stand out. Recommended size: 400x300px
               </p>
             </div>

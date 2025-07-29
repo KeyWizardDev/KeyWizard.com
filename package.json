@@ -11,25 +11,31 @@
     "install-all": "npm install && cd client && npm install"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "socket.io": "^4.7.4",
-    "sqlite3": "^5.1.6",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "multer": "^2.0.2",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "express-session": "^1.17.3",
-    "jsonwebtoken": "^9.0.2",
-    "bcryptjs": "^2.4.3",
-    "dotenv": "^16.3.1",
-    "cookie-parser": "^1.4.6"
+    "socket.io": "^4.7.4",
+    "sqlite3": "^5.1.6"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
   },
-  "keywords": ["keyboard", "shortcuts", "sharing", "platform"],
+  "keywords": [
+    "keyboard",
+    "shortcuts",
+    "sharing",
+    "platform"
+  ],
   "author": "KeyWizard Team",
   "license": "MIT"
-} 
+}

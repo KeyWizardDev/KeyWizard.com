@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, X, Save } from 'lucide-react';
+import { ArrowLeft, Plus, X, Save, Upload, Image as ImageIcon } from 'lucide-react';
 
 function CreatePackage({ onCreate }) {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -12,6 +17,97 @@ function CreatePackage({ onCreate }) {
     image_url: '',
     shortcuts: [{ key: '', action: '', description: '' }]
   });
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileInput = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      handleFile(e.target.files[0]);
+    }
+  };
+
+  const handleFile = async (file) => {
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
+    setSelectedImage(file);
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreview(e.target.result);
+    };
+    reader.readAsDataURL(file);
+
+    // Upload the file
+    await uploadImage(file);
+  };
+
+  const uploadImage = async (file) => {
+    setUploading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Upload failed');
+      }
+
+      const result = await response.json();
+      setFormData(prev => ({ ...prev, image_url: result.imagePath }));
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload image: ' + error.message);
+      setSelectedImage(null);
+      setImagePreview(null);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    setFormData(prev => ({ ...prev, image_url: '' }));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -114,15 +210,90 @@ function CreatePackage({ onCreate }) {
             </div>
             
             <div>
-              <label style={{ display: 'block', marginBottom: '0.5rem' }}>Package Image URL</label>
-              <input
-                type="url"
-                className="input"
-                value={formData.image_url}
-                onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
-                placeholder="https://example.com/image.jpg (optional)"
-              />
-              <p style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '0.25rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem' }}>Package Image</label>
+              <div
+                style={{
+                  border: dragActive ? '2px dashed #007acc' : '2px dashed rgba(255,255,255,0.3)',
+                  borderRadius: '8px',
+                  padding: '2rem',
+                  textAlign: 'center',
+                  backgroundColor: dragActive ? 'rgba(0,122,204,0.1)' : 'rgba(255,255,255,0.05)',
+                  transition: 'all 0.2s ease',
+                  cursor: 'pointer',
+                  position: 'relative'
+                }}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileInput}
+                  style={{ display: 'none' }}
+                />
+                
+                {imagePreview ? (
+                  <div style={{ position: 'relative' }}>
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '200px',
+                        borderRadius: '8px',
+                        objectFit: 'contain'
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeImage();
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: '-8px',
+                        right: '-8px',
+                        background: '#ff6b6b',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '24px',
+                        height: '24px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '12px'
+                      }}
+                      title="Remove image"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <Upload size={48} style={{ marginBottom: '1rem', opacity: 0.7 }} />
+                    <p style={{ marginBottom: '0.5rem', fontSize: '1.1rem' }}>
+                      {uploading ? 'Uploading...' : 'Drag & drop an image here'}
+                    </p>
+                    <p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1rem' }}>
+                      or click to browse
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', opacity: 0.6 }}>
+                      <ImageIcon size={16} />
+                      <span style={{ fontSize: '0.85rem' }}>
+                        PNG, JPG, GIF up to 5MB
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <p style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '0.5rem' }}>
                 Add a relevant image to make your package stand out. Recommended size: 400x300px
               </p>
             </div>
