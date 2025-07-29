@@ -101,7 +101,7 @@ function initDatabase() {
 
     // Update existing VS Code package with new logo
     db.run(`UPDATE shortcut_packages SET image_url = ? WHERE name LIKE '%VS Code%'`, 
-      ['https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg'], 
+      ['/images/vscode-logo.svg'], 
       (err) => {
         if (err) {
           console.error('Error updating VS Code package:', err.message);
@@ -113,7 +113,7 @@ function initDatabase() {
 
     // Update existing Photoshop package with new logo
     db.run(`UPDATE shortcut_packages SET image_url = ? WHERE name LIKE '%Photoshop%'`, 
-      ['https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg'], 
+      ['/images/photoshop-logo.svg'], 
       (err) => {
         if (err) {
           console.error('Error updating Photoshop package:', err.message);
@@ -150,7 +150,7 @@ function initDatabase() {
                 author_id: sampleUserId,
                 author_name: "DevMaster",
                 category: "Development",
-                image_url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg",
+                image_url: "/images/vscode-logo.svg",
                 shortcuts: JSON.stringify([
                   { key: "Ctrl+Shift+P", action: "Command Palette", description: "Open command palette" },
                   { key: "Ctrl+P", action: "Quick Open", description: "Quick file navigation" },
@@ -163,7 +163,7 @@ function initDatabase() {
                 author_id: sampleUserId,
                 author_name: "DevMaster",
                 category: "Design",
-                image_url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg",
+                image_url: "/images/photoshop-logo.svg",
                 shortcuts: JSON.stringify([
                   { key: "Ctrl+Z", action: "Undo", description: "Undo last action" },
                   { key: "Ctrl+Shift+Z", action: "Redo", description: "Redo last action" },

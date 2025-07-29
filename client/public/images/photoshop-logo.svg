@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#001D26;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="20" fill="url(#bg)"/>
+  <text x="128" y="140" font-family="Arial, sans-serif" font-size="80" font-weight="bold" text-anchor="middle" fill="#00A8FF">Ps</text>
+</svg> 
