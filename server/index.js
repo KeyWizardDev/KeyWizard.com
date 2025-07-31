@@ -12,6 +12,7 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 const passport = require('./config/passport');
+const { migrateDatabase } = require('./database-migration');
 
 // Configure multer for image uploads
 const storage = multer.diskStorage({
@@ -98,6 +99,8 @@ const db = new sqlite3.Database(process.env.DATABASE_PATH || './server/database.
   } else {
     console.log('Connected to SQLite database');
     initDatabase();
+    // Run migration to add new packages
+    migrateDatabase();
   }
 });
 
