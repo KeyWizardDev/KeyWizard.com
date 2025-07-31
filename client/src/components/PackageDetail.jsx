@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Edit, Trash2, Download, Star, User, X, Plus, Upload, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, Download, Star, User, X, Plus, Upload, Image as ImageIcon, Clipboard } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 // Utility function to validate avatar URL
@@ -96,6 +96,19 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
 
   const removeShortcut = (index) => {
     setShortcuts(shortcuts.filter((_, i) => i !== index));
+  };
+
+  const handleCopyShortcuts = () => {
+    const shortcutsText = shortcuts.map(shortcut => 
+      `${shortcut.key} - ${shortcut.action}${shortcut.description ? ` (${shortcut.description})` : ''}`
+    ).join('\n');
+    
+    navigator.clipboard.writeText(shortcutsText).then(() => {
+      // You could add a toast notification here
+      console.log('Shortcuts copied to clipboard');
+    }).catch(err => {
+      console.error('Failed to copy shortcuts:', err);
+    });
   };
 
   const handleDrag = (e) => {
@@ -457,7 +470,13 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
             </div>
 
             <div>
-              <h3>Shortcuts ({shortcuts.length})</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h3>Shortcuts ({shortcuts.length})</h3>
+                <button onClick={handleCopyShortcuts} className="btn btn-secondary">
+                  <Clipboard size={16} style={{ marginRight: '0.5rem' }} />
+                  Copy Shortcuts
+                </button>
+              </div>
               <div style={{ display: 'grid', gap: '0.5rem' }}>
                 {shortcuts.map((shortcut, index) => (
                   <div key={index} className="shortcut-item">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Plus, Home, Package, User, LogIn } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -18,6 +18,7 @@ const validateAvatarUrl = (url) => {
 function Header() {
   const { user, logout } = useAuth();
   const [imageError, setImageError] = useState(false);
+  const location = useLocation();
 
   const handleLogout = async () => {
     await logout();
@@ -32,6 +33,9 @@ function Header() {
   const avatarUrl = user ? validateAvatarUrl(user.avatar_url) : null;
   const displayName = user ? (user.username || user.displayName || 'User') : 'User';
 
+  // Only show Browse button when not on the main page
+  const isOnMainPage = location.pathname === '/';
+
   return (
     <header className="header">
       <div className="container">
@@ -41,10 +45,12 @@ function Header() {
             KeyWizard
           </Link>
           <nav className="nav">
-            <Link to="/" className="btn btn-secondary">
-              <Home size={16} style={{ marginRight: '0.5rem' }} />
-              Browse
-            </Link>
+            {!isOnMainPage && (
+              <Link to="/" className="btn btn-secondary">
+                <Home size={16} style={{ marginRight: '0.5rem' }} />
+                Browse
+              </Link>
+            )}
             
             {user ? (
               <>
