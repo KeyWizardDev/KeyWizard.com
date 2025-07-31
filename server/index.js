@@ -195,7 +195,7 @@ function initDatabase() {
       if (row.count === 0) {
         // Create a sample user first
         db.run('INSERT OR IGNORE INTO users (google_id, username, email, avatar_url) VALUES (?, ?, ?, ?)',
-          ['sample_user_1', 'DevMaster', 'devmaster@example.com', null],
+          ['sample_user_1', 'KeyWizard Community', 'community@keywizard.com', null],
           function(err) {
             if (err) {
               console.error('Error creating sample user:', err.message);
@@ -211,7 +211,7 @@ function initDatabase() {
                 name: "VS Code Productivity",
                 description: "Essential shortcuts for VS Code development",
                 author_id: sampleUserId,
-                author_name: "DevMaster",
+                author_name: "CodeMaster",
                 category: "Development",
                 image_url: "/images/vscode-logo.png",
                 shortcuts: JSON.stringify([
@@ -231,7 +231,7 @@ function initDatabase() {
                 name: "IntelliJ IDEA Ultimate",
                 description: "Professional Java development shortcuts",
                 author_id: sampleUserId,
-                author_name: "JavaPro",
+                author_name: "DevWizard",
                 category: "Development",
                 image_url: "/images/intellij-logo.png",
                 shortcuts: JSON.stringify([
@@ -251,7 +251,7 @@ function initDatabase() {
                 name: "Eclipse IDE",
                 description: "Classic Java IDE keyboard shortcuts",
                 author_id: sampleUserId,
-                author_name: "EclipseDev",
+                author_name: "TechGuru",
                 category: "Development",
                 image_url: "/images/eclipse-logo.png",
                 shortcuts: JSON.stringify([
@@ -273,7 +273,7 @@ function initDatabase() {
                 name: "Figma Design Pro",
                 description: "Essential shortcuts for Figma design workflow",
                 author_id: sampleUserId,
-                author_name: "DesignWizard",
+                author_name: "DesignMaster",
                 category: "Design",
                 image_url: "/images/figma-logo.png",
                 shortcuts: JSON.stringify([
@@ -293,7 +293,7 @@ function initDatabase() {
                 name: "Sketch UI/UX",
                 description: "Professional UI/UX design shortcuts for Sketch",
                 author_id: sampleUserId,
-                author_name: "SketchMaster",
+                author_name: "CodeMaster",
                 category: "Design",
                 image_url: "/images/sketch-logo.png",
                 shortcuts: JSON.stringify([
@@ -313,7 +313,7 @@ function initDatabase() {
                 name: "Adobe Illustrator",
                 description: "Vector graphics and illustration shortcuts",
                 author_id: sampleUserId,
-                author_name: "IllustratorPro",
+                author_name: "DevWizard",
                 category: "Design",
                 image_url: "/images/illustrator-logo.png",
                 shortcuts: JSON.stringify([
@@ -335,7 +335,7 @@ function initDatabase() {
                 name: "Microsoft Word",
                 description: "Essential shortcuts for document creation",
                 author_id: sampleUserId,
-                author_name: "OfficePro",
+                author_name: "TechGuru",
                 category: "Productivity",
                 image_url: "/images/word-logo.png",
                 shortcuts: JSON.stringify([
@@ -355,7 +355,7 @@ function initDatabase() {
                 name: "Microsoft Excel",
                 description: "Spreadsheet and data analysis shortcuts",
                 author_id: sampleUserId,
-                author_name: "ExcelMaster",
+                author_name: "DesignMaster",
                 category: "Productivity",
                 image_url: "/images/excel-logo.png",
                 shortcuts: JSON.stringify([
@@ -375,7 +375,7 @@ function initDatabase() {
                 name: "Microsoft PowerPoint",
                 description: "Presentation creation and editing shortcuts",
                 author_id: sampleUserId,
-                author_name: "PowerPointPro",
+                author_name: "CodeMaster",
                 category: "Productivity",
                 image_url: "/images/powerpoint-logo.png",
                 shortcuts: JSON.stringify([
@@ -395,7 +395,7 @@ function initDatabase() {
                 name: "Microsoft Teams",
                 description: "Team collaboration and communication shortcuts",
                 author_id: sampleUserId,
-                author_name: "TeamsAdmin",
+                author_name: "DevWizard",
                 category: "Productivity",
                 image_url: "/images/teams-logo.png",
                 shortcuts: JSON.stringify([
@@ -415,7 +415,7 @@ function initDatabase() {
                 name: "Slack Workspace",
                 description: "Team messaging and collaboration shortcuts",
                 author_id: sampleUserId,
-                author_name: "SlackPro",
+                author_name: "TechGuru",
                 category: "Productivity",
                 image_url: "/images/slack-logo.png",
                 shortcuts: JSON.stringify([
@@ -437,7 +437,7 @@ function initDatabase() {
                 name: "Discord Chat",
                 description: "Gaming and community chat shortcuts",
                 author_id: sampleUserId,
-                author_name: "DiscordUser",
+                author_name: "DesignMaster",
                 category: "Communication",
                 image_url: "/images/discord-logo.png",
                 shortcuts: JSON.stringify([
@@ -457,7 +457,7 @@ function initDatabase() {
                 name: "Gmail Inbox",
                 description: "Email management and organization shortcuts",
                 author_id: sampleUserId,
-                author_name: "GmailPro",
+                author_name: "CodeMaster",
                 category: "Communication",
                 image_url: "/images/gmail-logo.png",
                 shortcuts: JSON.stringify([
@@ -477,7 +477,7 @@ function initDatabase() {
                 name: "Microsoft Outlook",
                 description: "Professional email and calendar management",
                 author_id: sampleUserId,
-                author_name: "OutlookAdmin",
+                author_name: "DevWizard",
                 category: "Communication",
                 image_url: "/images/outlook-logo.png",
                 shortcuts: JSON.stringify([
@@ -499,7 +499,7 @@ function initDatabase() {
                 name: "Final Cut Pro X",
                 description: "Professional video editing shortcuts",
                 author_id: sampleUserId,
-                author_name: "VideoEditor",
+                author_name: "TechGuru",
                 category: "Media",
                 image_url: "/images/finalcut-logo.png",
                 shortcuts: JSON.stringify([
@@ -519,7 +519,7 @@ function initDatabase() {
                 name: "Twitch Streaming",
                 description: "Live streaming and chat management shortcuts",
                 author_id: sampleUserId,
-                author_name: "StreamerPro",
+                author_name: "DesignMaster",
                 category: "Media",
                 image_url: "/images/twitch-logo.png",
                 shortcuts: JSON.stringify([
@@ -541,7 +541,7 @@ function initDatabase() {
                 name: "Google Chrome",
                 description: "Web browsing and navigation shortcuts",
                 author_id: sampleUserId,
-                author_name: "ChromeUser",
+                author_name: "CodeMaster",
                 category: "Web",
                 image_url: "/images/chrome-logo.png",
                 shortcuts: JSON.stringify([
@@ -561,7 +561,7 @@ function initDatabase() {
                 name: "Mozilla Firefox",
                 description: "Privacy-focused browsing shortcuts",
                 author_id: sampleUserId,
-                author_name: "FirefoxUser",
+                author_name: "DevWizard",
                 category: "Web",
                 image_url: "/images/firefox-logo.png",
                 shortcuts: JSON.stringify([
@@ -581,7 +581,7 @@ function initDatabase() {
                 name: "Microsoft Edge",
                 description: "Modern web browsing with Microsoft integration",
                 author_id: sampleUserId,
-                author_name: "EdgeUser",
+                author_name: "TechGuru",
                 category: "Web",
                 image_url: "/images/edge-logo.png",
                 shortcuts: JSON.stringify([
