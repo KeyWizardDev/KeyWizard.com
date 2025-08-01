@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Edit, Trash2, Download, Star, User, X, Plus, Upload, Image as ImageIcon, Clipboard } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import Toast from './Toast';
 
 // Utility function to validate avatar URL
 const validateAvatarUrl = (url) => {
@@ -28,6 +29,7 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [toast, setToast] = useState(null);
 
   const pkg = packages.find(p => p.id == id);
   
@@ -99,15 +101,23 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
   };
 
   const handleCopyShortcuts = () => {
-    const shortcutsText = shortcuts.map(shortcut => 
-      `${shortcut.key} - ${shortcut.action}${shortcut.description ? ` (${shortcut.description})` : ''}`
-    ).join('\n');
+    // Convert to KeyWizard format
+    const keyWizardJson = {
+      "Name": pkg.name,
+      "Shortcuts": shortcuts.map(shortcut => ({
+        "Description": shortcut.description || shortcut.action || "",
+        "Keys": [shortcut.key || ""]
+      }))
+    };
     
-    navigator.clipboard.writeText(shortcutsText).then(() => {
-      // You could add a toast notification here
-      console.log('Shortcuts copied to clipboard');
+    const json = JSON.stringify(keyWizardJson, null, 2);
+    
+    navigator.clipboard.writeText(json).then(() => {
+      setToast({ message: 'Copied shortcuts to clipboard!', type: 'success' });
+      setTimeout(() => setToast(null), 2000);
     }).catch(err => {
-      console.error('Failed to copy shortcuts:', err);
+      setToast({ message: 'Failed to copy shortcuts', type: 'error' });
+      setTimeout(() => setToast(null), 2000);
     });
   };
 
@@ -492,6 +502,7 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
           </div>
         )}
       </div>
+      {toast && <Toast message={toast.message} type={toast.type} />}
     </div>
   );
 }

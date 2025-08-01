@@ -1,6 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, X, Save, Upload, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Plus, X, Save, Upload, Image as ImageIcon, Code, Palette, Briefcase, MessageCircle, Video, Globe } from 'lucide-react';
+
+// Category configuration with icons and colors (same as PackageList)
+const CATEGORIES = {
+  'Development': { icon: Code, color: '#2563eb', bgColor: '#dbeafe' },
+  'Design': { icon: Palette, color: '#7c3aed', bgColor: '#ede9fe' },
+  'Productivity': { icon: Briefcase, color: '#059669', bgColor: '#d1fae5' },
+  'Communication': { icon: MessageCircle, color: '#dc2626', bgColor: '#fee2e2' },
+  'Media': { icon: Video, color: '#ea580c', bgColor: '#fed7aa' },
+  'Web': { icon: Globe, color: '#0891b2', bgColor: '#cffafe' }
+};
 
 function CreatePackage({ onCreate }) {
   const navigate = useNavigate();
@@ -10,6 +20,7 @@ function CreatePackage({ onCreate }) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [showCustomCategory, setShowCustomCategory] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -156,6 +167,17 @@ function CreatePackage({ onCreate }) {
     }
   };
 
+  const handleCategoryChange = (e) => {
+    const selectedValue = e.target.value;
+    if (selectedValue === 'Other') {
+      setShowCustomCategory(true);
+      setFormData(prev => ({ ...prev, category: '' }));
+    } else {
+      setShowCustomCategory(false);
+      setFormData(prev => ({ ...prev, category: selectedValue }));
+    }
+  };
+
   return (
     <div className="fade-in">
       <div style={{ marginBottom: '2rem' }}>
@@ -200,13 +222,55 @@ function CreatePackage({ onCreate }) {
             
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem' }}>Category</label>
-              <input
-                type="text"
-                className="input"
-                value={formData.category}
-                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                placeholder="e.g., Development, Design, Productivity"
-              />
+              {!showCustomCategory ? (
+                <select
+                  className="input"
+                  value={formData.category || ''}
+                  onChange={handleCategoryChange}
+                  style={{ 
+                    backgroundColor: 'rgba(255,255,255,0.05)', 
+                    border: '1px solid #6d665b',
+                    borderRadius: '8px',
+                    padding: '0.75rem',
+                    color: 'inherit',
+                    fontSize: '1rem',
+                    width: '100%',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="">Select a category</option>
+                  {Object.keys(CATEGORIES).map(category => (
+                    <option 
+                      key={category} 
+                      value={category}
+                      style={{
+                        backgroundColor: formData.category === category ? CATEGORIES[category].bgColor : 'transparent',
+                        color: formData.category === category ? CATEGORIES[category].color : 'inherit'
+                      }}
+                    >
+                      {category}
+                    </option>
+                  ))}
+                  <option value="Other">Other</option>
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="Enter custom category"
+                  value={formData.category}
+                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                  style={{ 
+                    backgroundColor: 'rgba(255,255,255,0.05)', 
+                    border: '1px solid #6d665b',
+                    borderRadius: '8px',
+                    padding: '0.75rem',
+                    color: 'inherit',
+                    fontSize: '1rem',
+                    width: '100%'
+                  }}
+                />
+              )}
             </div>
             
             <div>

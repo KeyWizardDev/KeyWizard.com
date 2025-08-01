@@ -8,6 +8,7 @@ import PackageDetail from './components/PackageDetail';
 import CreatePackage from './components/CreatePackage';
 import Login from './components/Login';
 import Profile from './components/Profile';
+import About from './components/About';
 import Toast from './components/Toast';
 
 // Socket connection
@@ -199,6 +200,10 @@ function AppContent() {
             element={
               user ? <Profile /> : <Login />
             } 
+          />
+          <Route 
+            path="/about" 
+            element={<About />} 
           />
         </Routes>
       </main>

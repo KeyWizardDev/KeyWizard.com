@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Plus, Home, Package, User, LogIn } from 'lucide-react';
+import { Plus, Home, Package, User, LogIn, Search } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 // Utility function to validate avatar URL
@@ -40,18 +40,20 @@ function Header() {
     <header className="header">
       <div className="container">
         <div className="header-content">
-          <Link to="/" className="logo" style={{ fontFamily: 'Inter, Segoe UI, sans-serif', letterSpacing: '-1px', fontWeight: 800 }}>
-            <img src="/logo.png" alt="KeyWizard Logo" style={{ width: 36, height: 36, marginRight: 10, borderRadius: 8, background: '#fffdfa', boxShadow: '0 2px 8px rgba(44,39,33,0.10)' }} />
-            KeyWizard
-          </Link>
-          <nav className="nav">
-            {!isOnMainPage && (
+          <div className="header-left">
+            <Link to="/" className="logo-link">
+              <img src="/logo.png" alt="KeyWizard Logo" className="logo" style={{ width: '80px', height: '80px', borderRadius: '12px' }} />
+            </Link>
+            <Link to="/about" className="btn btn-secondary" style={{ marginLeft: '1rem' }}>
+              About
+            </Link>
+            {location.pathname !== '/' && (
               <Link to="/" className="btn btn-secondary">
-                <Home size={16} style={{ marginRight: '0.5rem' }} />
-                Browse
+                <Search size={16} /> Browse
               </Link>
             )}
-            
+          </div>
+          <nav className="nav">
             {user ? (
               <>
                 <Link to="/create" className="btn">

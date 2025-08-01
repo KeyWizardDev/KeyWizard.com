@@ -96,10 +96,92 @@ function PackageList({ packages, loading, onDelete }) {
   // Hero section for homepage
   const Hero = () => (
     <div style={{
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '2.5rem 0 2rem 0',
+      display: 'flex', 
+      flexDirection: 'row', 
+      alignItems: 'center', 
+      justifyContent: 'space-between', 
+      margin: '2.5rem 0 2rem 0',
+      maxWidth: '1200px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      padding: '0 2rem'
     }}>
-      <img src="/logo.png" alt="KeyWizard Logo" style={{ width: 90, height: 90, marginBottom: 18, borderRadius: 18, background: '#fffdfa', boxShadow: '0 4px 24px rgba(44,39,33,0.10)' }} />
-      <h1 style={{ fontSize: '2.2rem', fontWeight: 800, margin: 0, color: '#232323', letterSpacing: '-1px', textAlign: 'center' }}>Shortcut Evolution.<br /><span style={{ fontWeight: 400, fontSize: '1.2rem', color: '#6d665b' }}>Be the final form.</span></h1>
+      {/* Left side - Text content */}
+      <div style={{
+        flex: '1',
+        maxWidth: '600px'
+      }}>
+        <h1 style={{ 
+          fontSize: '4.5rem', 
+          fontWeight: 800, 
+          margin: '0 0 1rem 0', 
+          color: '#232323', 
+          letterSpacing: '-2px', 
+          textAlign: 'left',
+          lineHeight: '1.1'
+        }}>
+          KeyWizard
+        </h1>
+        <p style={{ 
+          fontSize: '1.4rem', 
+          color: '#6d665b', 
+          margin: '0 0 2rem 0',
+          lineHeight: '1.4',
+          fontWeight: '600'
+        }}>
+          The future of Windows productivity and accessibility.
+        </p>
+        
+        {/* Microsoft Store Download Button */}
+        <a 
+          href="https://apps.microsoft.com/detail/9nf4pjffzzms?hl=en-US&gl=US" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-block',
+            transition: 'all 0.2s ease',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.filter = 'brightness(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.filter = 'brightness(1)';
+          }}
+        >
+          <img 
+            src="/images/DownloadButton.png" 
+            alt="Download from Microsoft Store" 
+            style={{ 
+              height: '60px', 
+              width: 'auto',
+              display: 'block'
+            }} 
+          />
+        </a>
+      </div>
+
+      {/* Right side - Large Image */}
+      <div style={{
+        flex: '1',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <img 
+          src="/images/example.png" 
+          alt="KeyWizard Example" 
+          style={{ 
+            width: '600px', 
+            height: 'auto',
+            maxWidth: '100%',
+            borderRadius: '12px',
+            boxShadow: '0 8px 32px rgba(44,39,33,0.15)'
+          }} 
+        />
+      </div>
     </div>
   );
 
@@ -137,18 +219,22 @@ function PackageList({ packages, loading, onDelete }) {
       shortcuts = JSON.parse(pkg.shortcuts || '[]');
     } catch (e) {}
     
-    const json = JSON.stringify({
-      name: pkg.name,
-      description: pkg.description,
-      category: pkg.category,
-      shortcuts: shortcuts
-    }, null, 2);
+    // Convert to KeyWizard format
+    const keyWizardJson = {
+      "Name": pkg.name,
+      "Shortcuts": shortcuts.map(shortcut => ({
+        "Description": shortcut.description || shortcut.action || "",
+        "Keys": [shortcut.key || ""]
+      }))
+    };
+    
+    const json = JSON.stringify(keyWizardJson, null, 2);
     
     navigator.clipboard.writeText(json).then(() => {
-      setToast({ message: 'Copied JSON to clipboard!', type: 'success' });
+      setToast({ message: 'Copied shortcuts to clipboard!', type: 'success' });
       setTimeout(() => setToast(null), 2000);
     }, () => {
-      setToast({ message: 'Failed to copy JSON', type: 'error' });
+      setToast({ message: 'Failed to copy shortcuts', type: 'error' });
       setTimeout(() => setToast(null), 2000);
     });
   };
