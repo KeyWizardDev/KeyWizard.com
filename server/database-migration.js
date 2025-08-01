@@ -7104,91 +7104,6 @@ function migrateDatabase() {
                     "description": "Exclude overlapping areas"
           },
           {
-                    "key": "Cmd+Shift+D",
-                    "action": "Divide",
-                    "description": "Divide objects"
-          },
-          {
-                    "key": "Cmd+Shift+O",
-                    "action": "Outline Stroke",
-                    "description": "Convert stroke to outline"
-          },
-          {
-                    "key": "Cmd+Shift+E",
-                    "action": "Expand Appearance",
-                    "description": "Expand appearance effects"
-          },
-          {
-                    "key": "Cmd+Shift+O",
-                    "action": "Offset Path",
-                    "description": "Create offset path"
-          },
-          {
-                    "key": "Cmd+Shift+E",
-                    "action": "Simplify",
-                    "description": "Simplify paths"
-          },
-          {
-                    "key": "Cmd+Shift+O",
-                    "action": "Add Anchor Points",
-                    "description": "Add anchor points"
-          },
-          {
-                    "key": "Cmd+Shift+E",
-                    "action": "Remove Anchor Points",
-                    "description": "Remove anchor points"
-          },
-          {
-                    "key": "Cmd+Shift+O",
-                    "action": "Average",
-                    "description": "Average anchor points"
-          },
-          {
-                    "key": "Cmd+Shift+E",
-                    "action": "Join",
-                    "description": "Join anchor points"
-          },
-          {
-                    "key": "Cmd+Shift+O",
-                    "action": "Outline Object",
-                    "description": "Create outline object"
-          },
-          {
-                    "key": "Cmd+Shift+E",
-                    "action": "Envelope Distort",
-                    "description": "Apply envelope distort"
-          },
-          {
-                    "key": "Cmd+Shift+O",
-                    "action": "Make with Warp",
-                    "description": "Create warp effect"
-          },
-          {
-                    "key": "Cmd+Shift+E",
-                    "action": "Make with Mesh",
-                    "description": "Create mesh effect"
-          },
-          {
-                    "key": "Cmd+Shift+O",
-                    "action": "Make with Top Object",
-                    "description": "Create top object effect"
-          },
-          {
-                    "key": "Cmd+Shift+E",
-                    "action": "Reset to Bounding Box",
-                    "description": "Reset to bounding box"
-          },
-          {
-                    "key": "Cmd+Shift+O",
-                    "action": "Reset to Center",
-                    "description": "Reset to center"
-          },
-          {
-                    "key": "Cmd+Shift+E",
-                    "action": "Reset to Origin",
-                    "description": "Reset to origin"
-          },
-          {
                     "key": "Cmd+Shift+A",
                     "action": "Select All",
                     "description": "Select all objects"
@@ -8579,8 +8494,19 @@ function migrateDatabase() {
         }
 
         if (existing) {
-          console.log(`Package "${pkg.name}" already exists, skipping...`);
-          skippedCount++;
+          // Update existing package with new shortcuts
+          db.run(
+            'UPDATE shortcut_packages SET description = ?, shortcuts = ?, image_url = ?, updated_at = datetime("now") WHERE name = ?',
+            [pkg.description, pkg.shortcuts, pkg.image_url, pkg.name],
+            function(err) {
+              if (err) {
+                console.error(`Error updating package ${pkg.name}:`, err.message);
+                return;
+              }
+              console.log(`Updated package: ${pkg.name} with new shortcuts`);
+              addedCount++;
+            }
+          );
         } else {
           // Insert new package
           db.run(
@@ -8600,7 +8526,7 @@ function migrateDatabase() {
         // Check if this is the last package
         if (index === packages.length - 1) {
           setTimeout(() => {
-            console.log(`Migration complete! Added ${addedCount} packages, skipped ${skippedCount} existing packages.`);
+            console.log(`Migration complete! Added/Updated ${addedCount} packages.`);
             db.close();
           }, 1000);
         }
