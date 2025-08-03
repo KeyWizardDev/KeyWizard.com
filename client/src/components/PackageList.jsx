@@ -224,7 +224,7 @@ function PackageList({ packages, loading, onDelete }) {
         "Name": pkg.name,
         "Shortcuts": shortcuts.map(shortcut => ({
           "Description": shortcut.description || shortcut.action || "",
-          "Keys": [shortcut.key || ""]
+          "Keys": (shortcut.key || "").split('+').map(key => key.trim().toUpperCase())
         }))
       };
       
@@ -245,7 +245,7 @@ function PackageList({ packages, loading, onDelete }) {
         "Name": pkg.name,
         "Shortcuts": shortcuts.map(shortcut => ({
           "Description": shortcut.description || shortcut.action || "",
-          "Keys": [shortcut.key || ""]
+          "Keys": (shortcut.key || "").split('+').map(key => key.trim().toUpperCase())
         }))
       };
       
