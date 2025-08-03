@@ -28,6 +28,101 @@ const CATEGORIES = {
   'Web': { icon: Globe, color: '#0891b2', bgColor: '#cffafe' }
 };
 
+// SearchBar component moved outside to prevent re-renders
+const SearchBar = React.memo(({ searchQuery, setSearchQuery, searchInputRef, searchFilteredPackages }) => (
+  <div style={{
+    marginBottom: '2rem',
+    width: '100%'
+  }}>
+    <div style={{
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%'
+    }}>
+      <Search 
+        size={20} 
+        style={{
+          position: 'absolute',
+          left: '1rem',
+          color: '#6d665b',
+          zIndex: 1
+        }}
+      />
+      <input
+        ref={searchInputRef}
+        type="text"
+        placeholder="Search packages by name, description, category, or author..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        style={{
+          width: '100%',
+          padding: '1rem 1rem 1rem 3rem',
+          border: '2px solid #e5e7eb',
+          borderRadius: '12px',
+          fontSize: '1rem',
+          outline: 'none',
+          transition: 'all 0.2s ease',
+          background: '#ffffff',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+        }}
+        onFocus={(e) => {
+          e.target.style.borderColor = '#2563eb';
+          e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
+        }}
+        onBlur={(e) => {
+          e.target.style.borderColor = '#e5e7eb';
+          e.target.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+        }}
+      />
+      {searchQuery && (
+        <button
+          onClick={() => {
+            setSearchQuery('');
+            searchInputRef.current?.focus();
+          }}
+          style={{
+            position: 'absolute',
+            right: '1rem',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: '#6d665b',
+            fontSize: '1.2rem',
+            padding: '0.25rem',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f3f4f6';
+            e.currentTarget.style.color = '#dc2626';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'none';
+            e.currentTarget.style.color = '#6d665b';
+          }}
+        >
+          ×
+        </button>
+      )}
+    </div>
+    {searchQuery && (
+      <div style={{
+        marginTop: '0.5rem',
+        textAlign: 'center',
+        color: '#6d665b',
+        fontSize: '0.9rem',
+        width: '100%'
+      }}>
+        Found {searchFilteredPackages.length} package{searchFilteredPackages.length !== 1 ? 's' : ''} for "{searchQuery}"
+      </div>
+    )}
+  </div>
+));
+
 function PackageList({ packages, loading, onDelete }) {
   const { user } = useAuth();
   const [toast, setToast] = useState(null);
@@ -36,38 +131,44 @@ function PackageList({ packages, loading, onDelete }) {
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef(null);
 
+  // Memoize setSearchQuery to prevent unnecessary re-renders
+  const handleSearchQueryChange = useCallback((value) => {
+    setSearchQuery(value);
+  }, []);
+
   const handleImageError = (authorId) => {
     setImageErrors(prev => new Set(prev).add(authorId));
   };
 
-  // Filter packages based on search query and selected category
-  const filteredPackages = useMemo(() => {
-    let filtered = packages;
-    
-    // Apply search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
-      filtered = packages.filter(pkg => 
-        pkg.name.toLowerCase().includes(query) ||
-        pkg.description.toLowerCase().includes(query) ||
-        pkg.category.toLowerCase().includes(query) ||
-        pkg.author_name.toLowerCase().includes(query)
-      );
-    }
-    
-    // Apply category filter (only if not searching)
-    if (!searchQuery.trim() && selectedCategory !== 'All') {
-      filtered = filtered.filter(pkg => pkg.category === selectedCategory);
-    }
-    
-    return filtered;
-  }, [packages, searchQuery, selectedCategory]);
-
-  // Get available categories for filter buttons
+  // Get unique categories from packages
   const availableCategories = useMemo(() => {
-    const categories = ['All', ...new Set(packages.map(pkg => pkg.category))];
-    return categories.sort();
+    const categories = new Set(packages.map(pkg => pkg.category).filter(Boolean));
+    return ['All', ...Array.from(categories).sort()];
   }, [packages]);
+
+  // Filter packages by search query
+  const searchFilteredPackages = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return packages;
+    }
+    
+    const query = searchQuery.toLowerCase().trim();
+    return packages.filter(pkg => 
+      pkg.name.toLowerCase().includes(query) ||
+      pkg.description.toLowerCase().includes(query) ||
+      pkg.category.toLowerCase().includes(query) ||
+      pkg.author_name.toLowerCase().includes(query)
+    );
+  }, [packages, searchQuery]);
+
+  // Filter packages by selected category (now applied to search results)
+  const filteredPackages = useMemo(() => {
+    const searchResults = searchFilteredPackages;
+    if (selectedCategory === 'All') {
+      return searchResults;
+    }
+    return searchResults.filter(pkg => pkg.category === selectedCategory);
+  }, [searchFilteredPackages, selectedCategory]);
 
   // Group packages by category for the "All" view (now applied to search results)
   const groupedPackages = useMemo(() => {
@@ -76,7 +177,7 @@ function PackageList({ packages, loading, onDelete }) {
     }
 
     const grouped = {};
-    filteredPackages.forEach(pkg => {
+    searchFilteredPackages.forEach(pkg => {
       const category = pkg.category || 'Uncategorized';
       if (!grouped[category]) {
         grouped[category] = [];
@@ -100,7 +201,7 @@ function PackageList({ packages, loading, onDelete }) {
     });
 
     return sortedGrouped;
-  }, [filteredPackages, selectedCategory]);
+  }, [searchFilteredPackages, selectedCategory, filteredPackages]);
 
   if (loading) {
     return (
@@ -355,88 +456,6 @@ function PackageList({ packages, loading, onDelete }) {
       })}
     </div>
   );
-
-  // Search bar component with stable focus
-  const SearchBar = useCallback(() => (
-    <div style={{
-      marginBottom: '2rem',
-      width: '100%'
-    }}>
-      <div style={{
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%'
-      }}>
-        <Search 
-          size={20} 
-          style={{
-            position: 'absolute',
-            left: '1rem',
-            color: '#6d665b',
-            zIndex: 1
-          }}
-        />
-        <input
-          ref={searchInputRef}
-          type="text"
-          placeholder="Search packages by name, description, category, or author..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '1rem 1rem 1rem 3rem',
-            border: '1px solid #e5e7eb',
-            borderRadius: '0.5rem',
-            fontSize: '1rem',
-            outline: 'none',
-            transition: 'border-color 0.2s ease',
-            backgroundColor: '#ffffff'
-          }}
-          onFocus={(e) => {
-            e.target.style.borderColor = '#3b82f6';
-          }}
-          onBlur={(e) => {
-            e.target.style.borderColor = '#e5e7eb';
-          }}
-        />
-        {searchQuery && (
-          <button
-            onClick={() => {
-              setSearchQuery('');
-              searchInputRef.current?.focus();
-            }}
-            style={{
-              position: 'absolute',
-              right: '1rem',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              color: '#6d665b',
-              fontSize: '1.2rem',
-              padding: '0.25rem',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            title="Clear search"
-          >
-            ×
-          </button>
-        )}
-      </div>
-      {searchQuery && (
-        <div style={{
-          marginTop: '0.5rem',
-          color: '#6d665b',
-          fontSize: '0.9rem'
-        }}>
-          Found {filteredPackages.length} result{filteredPackages.length !== 1 ? 's' : ''}
-        </div>
-      )}
-    </div>
-  ), [searchQuery, filteredPackages.length]);
 
   // Package card component
   const PackageCard = ({ pkg, showCategoryIcon = false }) => {
@@ -728,7 +747,12 @@ function PackageList({ packages, loading, onDelete }) {
         <p>Discover and share custom keyboard shortcut collections</p>
       </div>
       
-      <SearchBar />
+      <SearchBar 
+        searchQuery={searchQuery} 
+        setSearchQuery={handleSearchQueryChange} 
+        searchInputRef={searchInputRef} 
+        searchFilteredPackages={searchFilteredPackages} 
+      />
       <CategoryFilters />
       
       {searchQuery ? (
@@ -771,7 +795,7 @@ function PackageList({ packages, loading, onDelete }) {
                 fontSize: '0.85rem',
                 fontWeight: '600'
               }}>
-                {filteredPackages.length}
+                {searchFilteredPackages.length}
               </span>
             </h2>
           </div>
@@ -781,7 +805,7 @@ function PackageList({ packages, loading, onDelete }) {
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
             gap: '1.5rem' 
           }}>
-            {filteredPackages.map((pkg) => (
+            {searchFilteredPackages.map((pkg) => (
               <PackageCard key={pkg.id} pkg={pkg} showCategoryIcon={true} />
             ))}
           </div>
