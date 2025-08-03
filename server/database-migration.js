@@ -5,12 +5,19 @@ function migrateDatabase() {
   const dbPath = process.env.DATABASE_PATH || path.join(__dirname, 'database.sqlite');
   const db = new sqlite3.Database(dbPath);
 
+  // Enable WAL mode for better concurrency
+  db.run('PRAGMA journal_mode = WAL');
+  db.run('PRAGMA synchronous = NORMAL');
+  db.run('PRAGMA cache_size = 10000');
+  db.run('PRAGMA temp_store = memory');
+
   console.log('Running database migration...');
 
   // First, get the sample user ID
   db.get('SELECT id FROM users WHERE google_id = ?', ['sample_user_1'], (err, user) => {
     if (err) {
       console.error('Error getting sample user:', err.message);
+      db.close();
       return;
     }
 
@@ -21,6 +28,7 @@ function migrateDatabase() {
         function(err) {
           if (err) {
             console.error('Error creating sample user:', err.message);
+            db.close();
             return;
           }
           console.log('Sample user created with ID:', this.lastID);
@@ -8724,12 +8732,23 @@ function migrateDatabase() {
 
     let addedCount = 0;
     let skippedCount = 0;
+    let currentIndex = 0;
 
-    packages.forEach((pkg, index) => {
+    function processNextPackage() {
+      if (currentIndex >= packages.length) {
+        console.log(`Migration complete! Added/Updated ${addedCount} packages.`);
+        db.close();
+        return;
+      }
+
+      const pkg = packages[currentIndex];
+      
       // Check if package already exists
       db.get('SELECT id FROM shortcut_packages WHERE name = ?', [pkg.name], (err, existing) => {
         if (err) {
           console.error(`Error checking package ${pkg.name}:`, err.message);
+          currentIndex++;
+          processNextPackage();
           return;
         }
 
@@ -8741,10 +8760,12 @@ function migrateDatabase() {
             function(err) {
               if (err) {
                 console.error(`Error updating package ${pkg.name}:`, err.message);
-                return;
+              } else {
+                console.log(`Updated package: ${pkg.name} with new shortcuts`);
+                addedCount++;
               }
-              console.log(`Updated package: ${pkg.name} with new shortcuts`);
-              addedCount++;
+              currentIndex++;
+              processNextPackage();
             }
           );
         } else {
@@ -8755,23 +8776,20 @@ function migrateDatabase() {
             function(err) {
               if (err) {
                 console.error(`Error inserting package ${pkg.name}:`, err.message);
-                return;
+              } else {
+                console.log(`Added package: ${pkg.name}`);
+                addedCount++;
               }
-              console.log(`Added package: ${pkg.name}`);
-              addedCount++;
+              currentIndex++;
+              processNextPackage();
             }
           );
         }
-
-        // Check if this is the last package
-        if (index === packages.length - 1) {
-          setTimeout(() => {
-            console.log(`Migration complete! Added/Updated ${addedCount} packages.`);
-            db.close();
-          }, 1000);
-        }
       });
-    });
+    }
+
+    // Start processing packages sequentially
+    processNextPackage();
   }
 }
 
