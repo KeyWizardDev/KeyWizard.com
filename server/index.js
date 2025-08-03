@@ -976,4 +976,32 @@ server.listen(PORT, () => {
   if (process.env.NODE_ENV !== 'production') {
     console.log(`Development mode: Frontend served by Vite on port 5173`);
   }
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`❌ Port ${PORT} is already in use. Please try one of these solutions:`);
+    console.error(`   1. Kill the process using port ${PORT}: lsof -ti:${PORT} | xargs kill -9`);
+    console.error(`   2. Use a different port: PORT=3001 npm run server`);
+    console.error(`   3. Wait a moment and try again`);
+    process.exit(1);
+  } else {
+    console.error('❌ Server error:', err);
+    process.exit(1);
+  }
+});
+
+// Graceful shutdown handlers
+process.on('SIGTERM', () => {
+  console.log('🛑 SIGTERM received, shutting down gracefully...');
+  server.close(() => {
+    console.log('✅ Server closed');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('🛑 SIGINT received, shutting down gracefully...');
+  server.close(() => {
+    console.log('✅ Server closed');
+    process.exit(0);
+  });
 }); 
