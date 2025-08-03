@@ -8479,6 +8479,246 @@ function migrateDatabase() {
                     "description": "Change file icon theme"
           }
 ])
+      },
+      {
+        name: "Zoom",
+        description: "Video conferencing and communication platform shortcuts for efficient remote collaboration",
+        author_id: sampleUserId,
+        author_name: "KeyWizard Team",
+        category: "Communication",
+        image_url: "/images/zoom-logo.png",
+        shortcuts: JSON.stringify([
+          {
+            "key": "Ctrl+Shift+A",
+            "action": "Mute/Unmute Audio",
+            "description": "Toggle microphone on/off"
+          },
+          {
+            "key": "Ctrl+Shift+V",
+            "action": "Start/Stop Video",
+            "description": "Toggle camera on/off"
+          },
+          {
+            "key": "Ctrl+Shift+R",
+            "action": "Start/Stop Recording",
+            "description": "Start or stop meeting recording"
+          },
+          {
+            "key": "Ctrl+Shift+C",
+            "action": "Chat",
+            "description": "Open chat panel"
+          },
+          {
+            "key": "Ctrl+Shift+P",
+            "action": "Participants",
+            "description": "Show participants list"
+          },
+          {
+            "key": "Ctrl+Shift+S",
+            "action": "Share Screen",
+            "description": "Start screen sharing"
+          },
+          {
+            "key": "Ctrl+Shift+W",
+            "action": "Switch Camera",
+            "description": "Switch between cameras"
+          },
+          {
+            "key": "Ctrl+Shift+T",
+            "action": "Touch Up My Appearance",
+            "description": "Enable beauty filter"
+          },
+          {
+            "key": "Ctrl+Shift+O",
+            "action": "Virtual Background",
+            "description": "Change virtual background"
+          },
+          {
+            "key": "Ctrl+Shift+M",
+            "action": "Minimize Meeting",
+            "description": "Minimize meeting window"
+          }
+        ])
+      },
+      {
+        name: "Notion",
+        description: "All-in-one workspace for notes, docs, and project management shortcuts",
+        author_id: sampleUserId,
+        author_name: "KeyWizard Team",
+        category: "Productivity",
+        image_url: "/images/notion-logo.png",
+        shortcuts: JSON.stringify([
+          {
+            "key": "Ctrl+N",
+            "action": "New Page",
+            "description": "Create a new page"
+          },
+          {
+            "key": "Ctrl+Shift+N",
+            "action": "New Database",
+            "description": "Create a new database"
+          },
+          {
+            "key": "Ctrl+E",
+            "action": "Search",
+            "description": "Search across workspace"
+          },
+          {
+            "key": "Ctrl+Shift+E",
+            "action": "Export",
+            "description": "Export current page"
+          },
+          {
+            "key": "Ctrl+Shift+L",
+            "action": "Toggle Sidebar",
+            "description": "Show/hide sidebar"
+          },
+          {
+            "key": "Ctrl+Shift+P",
+            "action": "Command Palette",
+            "description": "Open command palette"
+          },
+          {
+            "key": "Ctrl+Shift+U",
+            "action": "Toggle Full Width",
+            "description": "Toggle full width view"
+          },
+          {
+            "key": "Ctrl+Shift+T",
+            "action": "Toggle Table of Contents",
+            "description": "Show/hide table of contents"
+          },
+          {
+            "key": "Ctrl+Shift+F",
+            "action": "Find in Page",
+            "description": "Search within current page"
+          },
+          {
+            "key": "Ctrl+Shift+C",
+            "action": "Copy Link",
+            "description": "Copy page link"
+          }
+        ])
+      },
+      {
+        name: "GitHub Desktop",
+        description: "Git client for Windows and macOS with visual interface shortcuts",
+        author_id: sampleUserId,
+        author_name: "KeyWizard Team",
+        category: "Development",
+        image_url: "/images/github-desktop-logo.png",
+        shortcuts: JSON.stringify([
+          {
+            "key": "Ctrl+N",
+            "action": "New Repository",
+            "description": "Create a new repository"
+          },
+          {
+            "key": "Ctrl+O",
+            "action": "Add Local Repository",
+            "description": "Add existing local repository"
+          },
+          {
+            "key": "Ctrl+Shift+O",
+            "action": "Clone Repository",
+            "description": "Clone repository from GitHub"
+          },
+          {
+            "key": "Ctrl+Shift+P",
+            "action": "Push",
+            "description": "Push commits to remote"
+          },
+          {
+            "key": "Ctrl+Shift+L",
+            "action": "Pull",
+            "description": "Pull latest changes"
+          },
+          {
+            "key": "Ctrl+Shift+C",
+            "action": "Commit",
+            "description": "Create a new commit"
+          },
+          {
+            "key": "Ctrl+Shift+B",
+            "action": "Create Branch",
+            "description": "Create a new branch"
+          },
+          {
+            "key": "Ctrl+Shift+M",
+            "action": "Merge Branch",
+            "description": "Merge current branch"
+          },
+          {
+            "key": "Ctrl+Shift+R",
+            "action": "Revert Commit",
+            "description": "Revert last commit"
+          },
+          {
+            "key": "Ctrl+Shift+T",
+            "action": "Open in Terminal",
+            "description": "Open repository in terminal"
+          }
+        ])
+      },
+      {
+        name: "Framer",
+        description: "Design and prototyping tool for creating interactive interfaces shortcuts",
+        author_id: sampleUserId,
+        author_name: "KeyWizard Team",
+        category: "Design",
+        image_url: "/images/framer-logo.png",
+        shortcuts: JSON.stringify([
+          {
+            "key": "Ctrl+N",
+            "action": "New Project",
+            "description": "Create a new project"
+          },
+          {
+            "key": "Ctrl+O",
+            "action": "Open Project",
+            "description": "Open existing project"
+          },
+          {
+            "key": "Ctrl+S",
+            "action": "Save",
+            "description": "Save current project"
+          },
+          {
+            "key": "Ctrl+Shift+S",
+            "action": "Save As",
+            "description": "Save project with new name"
+          },
+          {
+            "key": "Ctrl+Z",
+            "action": "Undo",
+            "description": "Undo last action"
+          },
+          {
+            "key": "Ctrl+Y",
+            "action": "Redo",
+            "description": "Redo last undone action"
+          },
+          {
+            "key": "Ctrl+D",
+            "action": "Duplicate",
+            "description": "Duplicate selected element"
+          },
+          {
+            "key": "Ctrl+G",
+            "action": "Group",
+            "description": "Group selected elements"
+          },
+          {
+            "key": "Ctrl+Shift+G",
+            "action": "Ungroup",
+            "description": "Ungroup selected elements"
+          },
+          {
+            "key": "Ctrl+Shift+P",
+            "action": "Preview",
+            "description": "Preview current design"
+          }
+        ])
       }
     ];
 
