@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, Trash2, Edit, Download, Star, User, Clipboard, Code, Palette, Briefcase, MessageCircle, Video, Globe } from 'lucide-react';
+import { ExternalLink, Trash2, Edit, Download, Star, User, Clipboard, Code, Palette, Briefcase, MessageCircle, Video, Globe, Search } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import Toast from './Toast';
 
 // Utility function to validate avatar URL
@@ -33,33 +33,50 @@ function PackageList({ packages, loading, onDelete }) {
   const [toast, setToast] = useState(null);
   const [imageErrors, setImageErrors] = useState(new Set());
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef(null);
 
   const handleImageError = (authorId) => {
     setImageErrors(prev => new Set(prev).add(authorId));
   };
 
-  // Get unique categories from packages
+  // Filter packages based on search query and selected category
+  const filteredPackages = useMemo(() => {
+    let filtered = packages;
+    
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = packages.filter(pkg => 
+        pkg.name.toLowerCase().includes(query) ||
+        pkg.description.toLowerCase().includes(query) ||
+        pkg.category.toLowerCase().includes(query) ||
+        pkg.author_name.toLowerCase().includes(query)
+      );
+    }
+    
+    // Apply category filter (only if not searching)
+    if (!searchQuery.trim() && selectedCategory !== 'All') {
+      filtered = filtered.filter(pkg => pkg.category === selectedCategory);
+    }
+    
+    return filtered;
+  }, [packages, searchQuery, selectedCategory]);
+
+  // Get available categories for filter buttons
   const availableCategories = useMemo(() => {
-    const categories = new Set(packages.map(pkg => pkg.category).filter(Boolean));
-    return ['All', ...Array.from(categories).sort()];
+    const categories = ['All', ...new Set(packages.map(pkg => pkg.category))];
+    return categories.sort();
   }, [packages]);
 
-  // Filter packages by selected category
-  const filteredPackages = useMemo(() => {
-    if (selectedCategory === 'All') {
-      return packages;
-    }
-    return packages.filter(pkg => pkg.category === selectedCategory);
-  }, [packages, selectedCategory]);
-
-  // Group packages by category for the "All" view
+  // Group packages by category for the "All" view (now applied to search results)
   const groupedPackages = useMemo(() => {
     if (selectedCategory !== 'All') {
       return { [selectedCategory]: filteredPackages };
     }
 
     const grouped = {};
-    packages.forEach(pkg => {
+    filteredPackages.forEach(pkg => {
       const category = pkg.category || 'Uncategorized';
       if (!grouped[category]) {
         grouped[category] = [];
@@ -83,7 +100,7 @@ function PackageList({ packages, loading, onDelete }) {
     });
 
     return sortedGrouped;
-  }, [packages, selectedCategory, filteredPackages]);
+  }, [filteredPackages, selectedCategory]);
 
   if (loading) {
     return (
@@ -339,10 +356,94 @@ function PackageList({ packages, loading, onDelete }) {
     </div>
   );
 
+  // Search bar component with stable focus
+  const SearchBar = useCallback(() => (
+    <div style={{
+      marginBottom: '2rem',
+      width: '100%'
+    }}>
+      <div style={{
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%'
+      }}>
+        <Search 
+          size={20} 
+          style={{
+            position: 'absolute',
+            left: '1rem',
+            color: '#6d665b',
+            zIndex: 1
+          }}
+        />
+        <input
+          ref={searchInputRef}
+          type="text"
+          placeholder="Search packages by name, description, category, or author..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '1rem 1rem 1rem 3rem',
+            border: '1px solid #e5e7eb',
+            borderRadius: '0.5rem',
+            fontSize: '1rem',
+            outline: 'none',
+            transition: 'border-color 0.2s ease',
+            backgroundColor: '#ffffff'
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = '#3b82f6';
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = '#e5e7eb';
+          }}
+        />
+        {searchQuery && (
+          <button
+            onClick={() => {
+              setSearchQuery('');
+              searchInputRef.current?.focus();
+            }}
+            style={{
+              position: 'absolute',
+              right: '1rem',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#6d665b',
+              fontSize: '1.2rem',
+              padding: '0.25rem',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            title="Clear search"
+          >
+            ×
+          </button>
+        )}
+      </div>
+      {searchQuery && (
+        <div style={{
+          marginTop: '0.5rem',
+          color: '#6d665b',
+          fontSize: '0.9rem'
+        }}>
+          Found {filteredPackages.length} result{filteredPackages.length !== 1 ? 's' : ''}
+        </div>
+      )}
+    </div>
+  ), [searchQuery, filteredPackages.length]);
+
   // Package card component
-  const PackageCard = ({ pkg }) => {
+  const PackageCard = ({ pkg, showCategoryIcon = false }) => {
     const shortcuts = JSON.parse(pkg.shortcuts || '[]');
     const isOwner = user && pkg.author_id === user.id;
+    const config = CATEGORIES[pkg.category] || { icon: null, color: '#6d665b', bgColor: '#f5f5f5' };
+    const IconComponent = config.icon;
     
     return (
       <Link 
@@ -380,6 +481,26 @@ function PackageList({ packages, loading, onDelete }) {
             position: 'relative',
             overflow: 'hidden'
           }}>
+            {/* Category Icon (shown during search) */}
+            {showCategoryIcon && IconComponent && (
+              <div style={{
+                position: 'absolute',
+                top: '8px',
+                left: '8px',
+                background: config.bgColor,
+                color: config.color,
+                padding: '0.5rem',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 2,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+              }}>
+                <IconComponent size={16} />
+              </div>
+            )}
+            
             {pkg.image_url ? (
               <img 
                 src={pkg.image_url} 
@@ -607,24 +728,83 @@ function PackageList({ packages, loading, onDelete }) {
         <p>Discover and share custom keyboard shortcut collections</p>
       </div>
       
+      <SearchBar />
       <CategoryFilters />
       
-      {selectedCategory === 'All' ? (
-        // Show grouped packages by category
-        Object.entries(groupedPackages).map(([category, categoryPackages]) => (
-          <CategorySection key={category} category={category} packages={categoryPackages} />
-        ))
-      ) : (
-        // Show filtered packages in a single grid
-        <div className="grid" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-          gap: '1.5rem' 
-        }}>
-          {filteredPackages.map((pkg) => (
-            <PackageCard key={pkg.id} pkg={pkg} />
-          ))}
+      {searchQuery ? (
+        // Show search results in a single "Results" section
+        <div style={{ marginBottom: '3rem' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            marginBottom: '1.5rem',
+            padding: '1rem 0',
+            borderBottom: '2px solid #e5e7eb',
+          }}>
+            <div style={{
+              background: '#f3f4f6',
+              color: '#6d665b',
+              padding: '0.5rem',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Search size={20} />
+            </div>
+            <h2 style={{
+              margin: 0,
+              fontSize: '1.5rem',
+              fontWeight: '700',
+              color: '#232323',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              Results
+              <span style={{
+                background: '#f3f4f6',
+                color: '#6d665b',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '20px',
+                fontSize: '0.85rem',
+                fontWeight: '600'
+              }}>
+                {filteredPackages.length}
+              </span>
+            </h2>
+          </div>
+          
+          <div className="grid" style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+            gap: '1.5rem' 
+          }}>
+            {filteredPackages.map((pkg) => (
+              <PackageCard key={pkg.id} pkg={pkg} showCategoryIcon={true} />
+            ))}
+          </div>
         </div>
+      ) : (
+        // Show normal category sections
+        selectedCategory === 'All' ? (
+          // Show grouped packages by category
+          Object.entries(groupedPackages).map(([category, categoryPackages]) => (
+            <CategorySection key={category} category={category} packages={categoryPackages} />
+          ))
+        ) : (
+          // Show filtered packages in a single grid
+          <div className="grid" style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+            gap: '1.5rem' 
+          }}>
+            {filteredPackages.map((pkg) => (
+              <PackageCard key={pkg.id} pkg={pkg} />
+            ))}
+          </div>
+        )
       )}
       
       {toast && <Toast {...toast} />}
