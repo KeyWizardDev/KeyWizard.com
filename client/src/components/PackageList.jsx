@@ -174,11 +174,13 @@ function PackageList({ packages, loading, onDelete }) {
           src="/images/example.png" 
           alt="KeyWizard Example" 
           style={{ 
-            width: '600px', 
+            width: '700px', 
             height: 'auto',
             maxWidth: '100%',
             borderRadius: '12px',
-            boxShadow: '0 8px 32px rgba(44,39,33,0.15)'
+            boxShadow: '0 8px 32px rgba(44,39,33,0.15)',
+            transform: 'scale(1.1)',
+            transformOrigin: 'center'
           }} 
         />
       </div>
