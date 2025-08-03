@@ -1664,11 +1664,6 @@ function migrateDatabase() {
                     "description": "Insert current time"
           },
           {
-                    "key": "Cmd+Shift+=",
-                    "action": "Superscript",
-                    "description": "Apply superscript"
-          },
-          {
                     "key": "Cmd+Shift+-",
                     "action": "Non-breaking Hyphen",
                     "description": "Insert non-breaking hyphen"
@@ -7084,66 +7079,6 @@ function migrateDatabase() {
                     "description": "Send object backward"
           },
           {
-                    "key": "Cmd+Shift+U",
-                    "action": "Union",
-                    "description": "Combine shapes with union"
-          },
-          {
-                    "key": "Cmd+Shift+S",
-                    "action": "Subtract",
-                    "description": "Subtract shapes"
-          },
-          {
-                    "key": "Cmd+Shift+X",
-                    "action": "Intersect",
-                    "description": "Intersect shapes"
-          },
-          {
-                    "key": "Cmd+Shift+E",
-                    "action": "Exclude",
-                    "description": "Exclude overlapping areas"
-          },
-          {
-                    "key": "Cmd+Shift+A",
-                    "action": "Select All",
-                    "description": "Select all objects"
-          },
-          {
-                    "key": "Cmd+Shift+D",
-                    "action": "Deselect All",
-                    "description": "Deselect all objects"
-          },
-          {
-                    "key": "Cmd+Shift+L",
-                    "action": "Select Same",
-                    "description": "Select objects with same properties"
-          },
-          {
-                    "key": "Cmd+Shift+H",
-                    "action": "Select Inverse",
-                    "description": "Invert selection"
-          },
-          {
-                    "key": "Cmd+Shift+J",
-                    "action": "Bring to Front",
-                    "description": "Bring object to front"
-          },
-          {
-                    "key": "Cmd+Shift+[",
-                    "action": "Send to Back",
-                    "description": "Send object to back"
-          },
-          {
-                    "key": "Cmd+Shift+]",
-                    "action": "Bring Forward",
-                    "description": "Bring object forward"
-          },
-          {
-                    "key": "Cmd+Shift+[",
-                    "action": "Send Backward",
-                    "description": "Send object backward"
-          },
-          {
                     "key": "Cmd+Shift+M",
                     "action": "Mask",
                     "description": "Create mask from selection"
@@ -8479,60 +8414,261 @@ function migrateDatabase() {
                     "description": "Change file icon theme"
           }
 ])
-      }
-    ];
-
-    let addedCount = 0;
-    let skippedCount = 0;
-
-    packages.forEach((pkg, index) => {
-      // Check if package already exists
-      db.get('SELECT id FROM shortcut_packages WHERE name = ?', [pkg.name], (err, existing) => {
-        if (err) {
-          console.error(`Error checking package ${pkg.name}:`, err.message);
-          return;
-        }
-
-        if (existing) {
-          // Update existing package with new shortcuts
-          db.run(
-            'UPDATE shortcut_packages SET description = ?, shortcuts = ?, image_url = ?, updated_at = datetime("now") WHERE name = ?',
-            [pkg.description, pkg.shortcuts, pkg.image_url, pkg.name],
-            function(err) {
-              if (err) {
-                console.error(`Error updating package ${pkg.name}:`, err.message);
-                return;
-              }
-              console.log(`Updated package: ${pkg.name} with new shortcuts`);
-              addedCount++;
-            }
-          );
-        } else {
-          // Insert new package
-          db.run(
-            'INSERT INTO shortcut_packages (name, description, author_id, author_name, category, shortcuts, downloads, rating, image_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime("now"), datetime("now"))',
-            [pkg.name, pkg.description, pkg.author_id, pkg.author_name, pkg.category, pkg.shortcuts, 0, 0, pkg.image_url],
-            function(err) {
-              if (err) {
-                console.error(`Error inserting package ${pkg.name}:`, err.message);
-                return;
-              }
-              console.log(`Added package: ${pkg.name}`);
-              addedCount++;
-            }
-          );
-        }
-
-        // Check if this is the last package
-        if (index === packages.length - 1) {
-          setTimeout(() => {
-            console.log(`Migration complete! Added/Updated ${addedCount} packages.`);
-            db.close();
-          }, 1000);
-        }
-      });
-    });
-  }
-}
-
-module.exports = { migrateDatabase };
+      },
+      {
+        name: "PixelCraft Pro",
+        description: "Professional image editing and digital art creation with advanced tools and effects",
+        author_id: sampleUserId,
+        author_name: "CreativeFlow",
+        category: "Design",
+        image_url: "/images/photoshop.png",
+        shortcuts: JSON.stringify([
+          { key: "Ctrl+N", description: "New document" },
+          { key: "Ctrl+O", description: "Open file" },
+          { key: "Ctrl+S", description: "Save" },
+          { key: "Ctrl+Shift+S", description: "Save As" },
+          { key: "Ctrl+Z", description: "Undo" },
+          { key: "Ctrl+Shift+Z", description: "Redo" },
+          { key: "Ctrl+A", description: "Select All" },
+          { key: "Ctrl+D", description: "Deselect" },
+          { key: "Ctrl+T", description: "Free Transform" },
+          { key: "Ctrl+J", description: "Duplicate Layer" },
+          { key: "Ctrl+Shift+N", description: "New Layer" },
+          { key: "Delete", description: "Delete Layer" },
+          { key: "Ctrl+E", description: "Merge Layers" },
+          { key: "Ctrl+Shift+E", description: "Merge Visible" },
+          { key: "Ctrl+G", description: "Group Layers" },
+          { key: "Ctrl+Shift+G", description: "Ungroup Layers" },
+          { key: "Ctrl+R", description: "Show/Hide Rulers" },
+          { key: "Ctrl+;", description: "Show/Hide Guides" },
+          { key: "Ctrl+Alt+;", description: "Lock Guides" },
+          { key: "Ctrl+Shift+;", description: "Snap to Guides" },
+          { key: "Ctrl+Alt+G", description: "Create Clipping Mask" },
+          { key: "Ctrl+Shift+Alt+G", description: "Release Clipping Mask" },
+          { key: "Ctrl+Shift+U", description: "Desaturate" },
+          { key: "Ctrl+U", description: "Hue/Saturation" },
+          { key: "Ctrl+L", description: "Levels" },
+          { key: "Ctrl+M", description: "Curves" },
+          { key: "Ctrl+B", description: "Color Balance" },
+          { key: "Ctrl+Shift+B", description: "Auto Color" },
+          { key: "Ctrl+Shift+L", description: "Auto Levels" },
+          { key: "Ctrl+Shift+Alt+L", description: "Auto Contrast" },
+          { key: "Ctrl+I", description: "Invert" },
+          { key: "Ctrl+Shift+I", description: "Invert Selection" },
+          { key: "Ctrl+Alt+A", description: "Select All Layers" },
+          { key: "Ctrl+Alt+Shift+A", description: "Deselect All Layers" }
+        ])
+      },
+      {
+        name: "LayoutMaster Studio",
+        description: "Professional page layout and publishing for print and digital media",
+        author_id: sampleUserId,
+        author_name: "DesignNinja",
+        category: "Design",
+        image_url: "/images/indesign.png",
+        shortcuts: JSON.stringify([
+          { key: "Ctrl+N", description: "New document" },
+          { key: "Ctrl+O", description: "Open file" },
+          { key: "Ctrl+S", description: "Save" },
+          { key: "Ctrl+Shift+S", description: "Save As" },
+          { key: "Ctrl+Z", description: "Undo" },
+          { key: "Ctrl+Shift+Z", description: "Redo" },
+          { key: "Ctrl+A", description: "Select All" },
+          { key: "Ctrl+D", description: "Deselect" },
+          { key: "Ctrl+C", description: "Copy" },
+          { key: "Ctrl+V", description: "Paste" },
+          { key: "Ctrl+X", description: "Cut" },
+          { key: "Ctrl+Shift+V", description: "Paste in Place" },
+          { key: "Ctrl+Alt+V", description: "Paste without Formatting" },
+          { key: "Ctrl+Shift+C", description: "Copy with Formatting" },
+          { key: "Ctrl+Shift+X", description: "Cut with Formatting" },
+          { key: "Ctrl+G", description: "Group" },
+          { key: "Ctrl+Shift+G", description: "Ungroup" },
+          { key: "Ctrl+L", description: "Lock" },
+          { key: "Ctrl+Alt+L", description: "Unlock All" },
+          { key: "Ctrl+Shift+L", description: "Lock Others" },
+          { key: "Ctrl+Alt+Shift+L", description: "Unlock All on Spread" },
+          { key: "Ctrl+Shift+[", description: "Send to Back" },
+          { key: "Ctrl+Shift+]", description: "Bring to Front" },
+          { key: "Ctrl+[", description: "Send Backward" },
+          { key: "Ctrl+]", description: "Bring Forward" },
+          { key: "Ctrl+Alt+Shift+[", description: "Send to Back of Layer" },
+          { key: "Ctrl+Alt+Shift+]", description: "Bring to Front of Layer" },
+          { key: "Ctrl+Alt+[", description: "Send Backward in Layer" },
+          { key: "Ctrl+Alt+]", description: "Bring Forward in Layer" },
+          { key: "Ctrl+Shift+O", description: "Create Outlines" },
+          { key: "Ctrl+Shift+F", description: "Find/Change" },
+          { key: "Ctrl+Alt+Shift+F", description: "Find/Change in Story" },
+          { key: "Ctrl+Shift+K", description: "Check Spelling" },
+          { key: "Ctrl+Alt+Shift+K", description: "Check Spelling in Story" },
+          { key: "Ctrl+Shift+E", description: "Edit Original" },
+          { key: "Ctrl+Alt+Shift+E", description: "Edit Original in Place" },
+          { key: "Ctrl+Shift+Alt+E", description: "Edit Original in New Window" }
+        ])
+      },
+      {
+        name: "UX Prototype Pro",
+        description: "Interactive prototyping and user experience design for modern applications",
+        author_id: sampleUserId,
+        author_name: "CreativeFlow",
+        category: "Design",
+        image_url: "/images/xd.png",
+        shortcuts: JSON.stringify([
+          { key: "Ctrl+N", description: "New document" },
+          { key: "Ctrl+O", description: "Open file" },
+          { key: "Ctrl+S", description: "Save" },
+          { key: "Ctrl+Shift+S", description: "Save As" },
+          { key: "Ctrl+Z", description: "Undo" },
+          { key: "Ctrl+Shift+Z", description: "Redo" },
+          { key: "Ctrl+A", description: "Select All" },
+          { key: "Ctrl+D", description: "Deselect" },
+          { key: "Ctrl+C", description: "Copy" },
+          { key: "Ctrl+V", description: "Paste" },
+          { key: "Ctrl+X", description: "Cut" },
+          { key: "Ctrl+Shift+V", description: "Paste in Place" },
+          { key: "Ctrl+Alt+V", description: "Paste without Formatting" },
+          { key: "Ctrl+Shift+C", description: "Copy with Formatting" },
+          { key: "Ctrl+Shift+X", description: "Cut with Formatting" },
+          { key: "Ctrl+G", description: "Group" },
+          { key: "Ctrl+Shift+G", description: "Ungroup" },
+          { key: "Ctrl+L", description: "Lock" },
+          { key: "Ctrl+Alt+L", description: "Unlock All" },
+          { key: "Ctrl+Shift+L", description: "Lock Others" },
+          { key: "Ctrl+Alt+Shift+L", description: "Unlock All on Artboard" },
+          { key: "Ctrl+Shift+[", description: "Send to Back" },
+          { key: "Ctrl+Shift+]", description: "Bring to Front" },
+          { key: "Ctrl+[", description: "Send Backward" },
+          { key: "Ctrl+]", description: "Bring Forward" },
+          { key: "Ctrl+Alt+Shift+[", description: "Send to Back of Layer" },
+          { key: "Ctrl+Alt+Shift+]", description: "Bring to Front of Layer" },
+          { key: "Ctrl+Alt+[", description: "Send Backward in Layer" },
+          { key: "Ctrl+Alt+]", description: "Bring Forward in Layer" },
+          { key: "Ctrl+Shift+O", description: "Create Outlines" },
+          { key: "Ctrl+Shift+F", description: "Find/Change" },
+          { key: "Ctrl+Alt+Shift+F", description: "Find/Change in Story" },
+          { key: "Ctrl+Shift+K", description: "Check Spelling" },
+          { key: "Ctrl+Alt+Shift+K", description: "Check Spelling in Story" },
+          { key: "Ctrl+Shift+E", description: "Edit Original" },
+          { key: "Ctrl+Alt+Shift+E", description: "Edit Original in Place" },
+          { key: "Ctrl+Shift+Alt+E", description: "Edit Original in New Window" }
+        ])
+      },
+      {
+        name: "MotionFX Studio",
+        description: "Advanced motion graphics and visual effects for video production",
+        author_id: sampleUserId,
+        author_name: "DigitalArtist",
+        category: "Design",
+        image_url: "/images/aftereffects.png",
+        shortcuts: JSON.stringify([
+          { key: "Ctrl+N", description: "New composition" },
+          { key: "Ctrl+O", description: "Open project" },
+          { key: "Ctrl+S", description: "Save" },
+          { key: "Ctrl+Shift+S", description: "Save As" },
+          { key: "Ctrl+Z", description: "Undo" },
+          { key: "Ctrl+Shift+Z", description: "Redo" },
+          { key: "Ctrl+A", description: "Select All" },
+          { key: "Ctrl+D", description: "Deselect" },
+          { key: "Ctrl+C", description: "Copy" },
+          { key: "Ctrl+V", description: "Paste" },
+          { key: "Ctrl+X", description: "Cut" },
+          { key: "Ctrl+Shift+V", description: "Paste in Place" },
+          { key: "Ctrl+Alt+V", description: "Paste without Formatting" },
+          { key: "Ctrl+Shift+C", description: "Copy with Formatting" },
+          { key: "Ctrl+Shift+X", description: "Cut with Formatting" },
+          { key: "Ctrl+G", description: "Group" },
+          { key: "Ctrl+Shift+G", description: "Ungroup" },
+          { key: "Ctrl+L", description: "Lock" },
+          { key: "Ctrl+Alt+L", description: "Unlock All" },
+          { key: "Ctrl+Shift+L", description: "Lock Others" },
+          { key: "Ctrl+Alt+Shift+L", description: "Unlock All on Layer" },
+          { key: "Ctrl+Shift+[", description: "Send to Back" },
+          { key: "Ctrl+Shift+]", description: "Bring to Front" },
+          { key: "Ctrl+[", description: "Send Backward" },
+          { key: "Ctrl+]", description: "Bring Forward" },
+          { key: "Ctrl+Alt+Shift+[", description: "Send to Back of Layer" },
+          { key: "Ctrl+Alt+Shift+]", description: "Bring to Front of Layer" },
+          { key: "Ctrl+Alt+[", description: "Send Backward in Layer" },
+          { key: "Ctrl+Alt+]", description: "Bring Forward in Layer" },
+          { key: "Ctrl+Shift+O", description: "Create Outlines" },
+          { key: "Ctrl+Shift+F", description: "Find/Change" },
+          { key: "Ctrl+Alt+Shift+F", description: "Find/Change in Story" },
+          { key: "Ctrl+Shift+K", description: "Check Spelling" },
+          { key: "Ctrl+Alt+Shift+K", description: "Check Spelling in Story" },
+          { key: "Ctrl+Shift+E", description: "Edit Original" },
+          { key: "Ctrl+Alt+Shift+E", description: "Edit Original in Place" },
+          { key: "Ctrl+Shift+Alt+E", description: "Edit Original in New Window" }
+        ])
+      },
+      {
+        name: "KnowledgeBase Hub",
+        description: "All-in-one workspace for notes, docs, and team collaboration",
+        author_id: sampleUserId,
+        author_name: "ProductivityPro",
+        category: "Productivity",
+        image_url: "/images/notion.png",
+        shortcuts: JSON.stringify([
+          { key: "Ctrl+N", description: "New page" },
+          { key: "Ctrl+O", description: "Open page" },
+          { key: "Ctrl+S", description: "Save" },
+          { key: "Ctrl+Shift+S", description: "Save As" },
+          { key: "Ctrl+Z", description: "Undo" },
+          { key: "Ctrl+Shift+Z", description: "Redo" },
+          { key: "Ctrl+A", description: "Select All" },
+          { key: "Ctrl+D", description: "Deselect" },
+          { key: "Ctrl+C", description: "Copy" },
+          { key: "Ctrl+V", description: "Paste" },
+          { key: "Ctrl+X", description: "Cut" },
+          { key: "Ctrl+Shift+V", description: "Paste in Place" },
+          { key: "Ctrl+Alt+V", description: "Paste without Formatting" },
+          { key: "Ctrl+Shift+C", description: "Copy with Formatting" },
+          { key: "Ctrl+Shift+X", description: "Cut with Formatting" },
+          { key: "Ctrl+G", description: "Group" },
+          { key: "Ctrl+Shift+G", description: "Ungroup" },
+          { key: "Ctrl+L", description: "Lock" },
+          { key: "Ctrl+Alt+L", description: "Unlock All" },
+          { key: "Ctrl+Shift+L", description: "Lock Others" },
+          { key: "Ctrl+Alt+Shift+L", description: "Unlock All on Page" },
+          { key: "Ctrl+Shift+[", description: "Send to Back" },
+          { key: "Ctrl+Shift+]", description: "Bring to Front" },
+          { key: "Ctrl+[", description: "Send Backward" },
+          { key: "Ctrl+]", description: "Bring Forward" },
+          { key: "Ctrl+Alt+Shift+[", description: "Send to Back of Block" },
+          { key: "Ctrl+Alt+Shift+]", description: "Bring to Front of Block" },
+          { key: "Ctrl+Alt+[", description: "Send Backward in Block" },
+          { key: "Ctrl+Alt+]", description: "Bring Forward in Block" },
+          { key: "Ctrl+Shift+O", description: "Create Outlines" },
+          { key: "Ctrl+Shift+F", description: "Find/Change" },
+          { key: "Ctrl+Alt+Shift+F", description: "Find/Change in Page" },
+          { key: "Ctrl+Shift+K", description: "Check Spelling" },
+          { key: "Ctrl+Alt+Shift+K", description: "Check Spelling in Page" },
+          { key: "Ctrl+Shift+E", description: "Edit Original" },
+          { key: "Ctrl+Alt+Shift+E", description: "Edit Original in Place" },
+          { key: "Ctrl+Shift+Alt+E", description: "Edit Original in New Window" }
+        ])
+      },
+      {
+        name: "TaskFlow Manager",
+        description: "Modern project management and team collaboration platform",
+        author_id: sampleUserId,
+        author_name: "ProductivityPro",
+        category: "Productivity",
+        image_url: "/images/linear.png",
+        shortcuts: JSON.stringify([
+          { key: "Ctrl+N", description: "New issue" },
+          { key: "Ctrl+O", description: "Open issue" },
+          { key: "Ctrl+S", description: "Save" },
+          { key: "Ctrl+Shift+S", description: "Save As" },
+          { key: "Ctrl+Z", description: "Undo" },
+          { key: "Ctrl+Shift+Z", description: "Redo" },
+          { key: "Ctrl+A", description: "Select All" },
+          { key: "Ctrl+D", description: "Deselect" },
+          { key: "Ctrl+C", description: "Copy" },
+          { key: "Ctrl+V", description: "Paste" },
+          { key: "Ctrl+X", description: "Cut" },
+          { key: "Ctrl+Shift+V", description: "Paste in Place" },
+          { key: "Ctrl+Alt+V", description: "Paste without Formatting" },
+          { key: "Ctrl+Shift+C", description: "Copy with Formatting" },
+          { key: "Ctrl+Shift+X", description: "Cut with Formatting" },
+          { key: "Ctrl+G", description: "Group" },
+          { key: "
