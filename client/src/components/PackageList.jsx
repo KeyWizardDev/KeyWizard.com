@@ -216,29 +216,61 @@ function PackageList({ packages, loading, onDelete }) {
 
   // Copy JSON to clipboard
   const handleCopyJson = (pkg) => {
-    let shortcuts = [];
     try {
-      shortcuts = JSON.parse(pkg.shortcuts || '[]');
-    } catch (e) {}
-    
-    // Convert to KeyWizard format
-    const keyWizardJson = {
-      "Name": pkg.name,
-      "Shortcuts": shortcuts.map(shortcut => ({
-        "Description": shortcut.description || shortcut.action || "",
-        "Keys": [shortcut.key || ""]
-      }))
-    };
-    
-    const json = JSON.stringify(keyWizardJson, null, 2);
-    
-    navigator.clipboard.writeText(json).then(() => {
-      setToast({ message: 'Copied shortcuts to clipboard!', type: 'success' });
-      setTimeout(() => setToast(null), 2000);
-    }, () => {
+      const shortcuts = JSON.parse(pkg.shortcuts || '[]');
+      
+      // Convert to KeyWizard format
+      const keyWizardJson = {
+        "Name": pkg.name,
+        "Shortcuts": shortcuts.map(shortcut => ({
+          "Description": shortcut.description || shortcut.action || "",
+          "Keys": [shortcut.key || ""]
+        }))
+      };
+      
+      navigator.clipboard.writeText(JSON.stringify(keyWizardJson, null, 2));
+      setToast({ message: 'Shortcuts copied to clipboard!', type: 'success' });
+    } catch (error) {
+      console.error('Error copying shortcuts:', error);
       setToast({ message: 'Failed to copy shortcuts', type: 'error' });
-      setTimeout(() => setToast(null), 2000);
-    });
+    }
+  };
+
+  const handleSaveAsJson = (pkg) => {
+    try {
+      const shortcuts = JSON.parse(pkg.shortcuts || '[]');
+      
+      // Convert to KeyWizard format
+      const keyWizardJson = {
+        "Name": pkg.name,
+        "Shortcuts": shortcuts.map(shortcut => ({
+          "Description": shortcut.description || shortcut.action || "",
+          "Keys": [shortcut.key || ""]
+        }))
+      };
+      
+      // Create a blob with the JSON data
+      const blob = new Blob([JSON.stringify(keyWizardJson, null, 2)], { type: 'application/json' });
+      
+      // Create a download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${pkg.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.json`;
+      
+      // Trigger the download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Clean up the URL
+      URL.revokeObjectURL(url);
+      
+      setToast({ message: 'Package saved as JSON file!', type: 'success' });
+    } catch (error) {
+      console.error('Error saving package as JSON:', error);
+      setToast({ message: 'Failed to save package as JSON', type: 'error' });
+    }
   };
 
   // Category filter buttons
@@ -472,7 +504,28 @@ function PackageList({ packages, loading, onDelete }) {
                 title="Copy shortcuts to clipboard"
               >
                 <Clipboard size={14} />
-                Copy Shortcuts
+                Copy
+              </button>
+              <button
+                className="btn btn-secondary"
+                style={{
+                  flex: 1,
+                  fontSize: '0.85rem',
+                  padding: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.25rem'
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSaveAsJson(pkg);
+                }}
+                title="Save package as JSON file"
+              >
+                <Download size={14} />
+                Save JSON
               </button>
             </div>
           </div>

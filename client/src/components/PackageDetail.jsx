@@ -101,24 +101,57 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
   };
 
   const handleCopyShortcuts = () => {
-    // Convert to KeyWizard format
-    const keyWizardJson = {
-      "Name": pkg.name,
-      "Shortcuts": shortcuts.map(shortcut => ({
-        "Description": shortcut.description || shortcut.action || "",
-        "Keys": [shortcut.key || ""]
-      }))
-    };
-    
-    const json = JSON.stringify(keyWizardJson, null, 2);
-    
-    navigator.clipboard.writeText(json).then(() => {
-      setToast({ message: 'Copied shortcuts to clipboard!', type: 'success' });
-      setTimeout(() => setToast(null), 2000);
-    }).catch(err => {
+    try {
+      // Convert to KeyWizard format
+      const keyWizardJson = {
+        "Name": pkg.name,
+        "Shortcuts": shortcuts.map(shortcut => ({
+          "Description": shortcut.description || shortcut.action || "",
+          "Keys": [shortcut.key || ""]
+        }))
+      };
+      
+      navigator.clipboard.writeText(JSON.stringify(keyWizardJson, null, 2));
+      setToast({ message: 'Shortcuts copied to clipboard!', type: 'success' });
+    } catch (error) {
+      console.error('Error copying shortcuts:', error);
       setToast({ message: 'Failed to copy shortcuts', type: 'error' });
-      setTimeout(() => setToast(null), 2000);
-    });
+    }
+  };
+
+  const handleSaveAsJson = () => {
+    try {
+      // Convert to KeyWizard format
+      const keyWizardJson = {
+        "Name": pkg.name,
+        "Shortcuts": shortcuts.map(shortcut => ({
+          "Description": shortcut.description || shortcut.action || "",
+          "Keys": [shortcut.key || ""]
+        }))
+      };
+      
+      // Create a blob with the JSON data
+      const blob = new Blob([JSON.stringify(keyWizardJson, null, 2)], { type: 'application/json' });
+      
+      // Create a download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${pkg.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.json`;
+      
+      // Trigger the download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Clean up the URL
+      URL.revokeObjectURL(url);
+      
+      setToast({ message: 'Package saved as JSON file!', type: 'success' });
+    } catch (error) {
+      console.error('Error saving package as JSON:', error);
+      setToast({ message: 'Failed to save package as JSON', type: 'error' });
+    }
   };
 
   const handleDrag = (e) => {
@@ -482,10 +515,16 @@ function PackageDetail({ packages, onUpdate, onDelete }) {
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <h3>Shortcuts ({shortcuts.length})</h3>
-                <button onClick={handleCopyShortcuts} className="btn btn-secondary">
-                  <Clipboard size={16} style={{ marginRight: '0.5rem' }} />
-                  Copy Shortcuts
-                </button>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button onClick={handleCopyShortcuts} className="btn btn-secondary">
+                    <Clipboard size={16} style={{ marginRight: '0.5rem' }} />
+                    Copy Shortcuts
+                  </button>
+                  <button onClick={handleSaveAsJson} className="btn btn-secondary">
+                    <Download size={16} style={{ marginRight: '0.5rem' }} />
+                    Save as JSON
+                  </button>
+                </div>
               </div>
               <div style={{ display: 'grid', gap: '0.5rem' }}>
                 {shortcuts.map((shortcut, index) => (
