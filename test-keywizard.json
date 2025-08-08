@@ -1,0 +1,25 @@
+{
+  "Name": "Test Package",
+  "Shortcuts": [
+    {
+      "Description": "Save file",
+      "Keys": ["CTRL", "S"]
+    },
+    {
+      "Description": "Copy selection",
+      "Keys": ["CTRL", "C"]
+    },
+    {
+      "Description": "Paste content",
+      "Keys": ["CTRL", "V"]
+    },
+    {
+      "Description": "Undo last action",
+      "Keys": ["CTRL", "Z"]
+    },
+    {
+      "Description": "Find text",
+      "Keys": ["CTRL", "F"]
+    }
+  ]
+} 

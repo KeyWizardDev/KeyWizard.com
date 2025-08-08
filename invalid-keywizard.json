@@ -1,0 +1,13 @@
+{
+  "Name": "Invalid Package",
+  "Shortcuts": [
+    {
+      "Description": "Save file",
+      "Keys": "CTRL+S"
+    },
+    {
+      "Description": "Copy selection",
+      "Keys": ["CTRL", "C"]
+    }
+  ]
+} 

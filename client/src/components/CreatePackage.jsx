@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, X, Save, Upload, Image as ImageIcon, Code, Palette, Briefcase, MessageCircle, Video, Globe } from 'lucide-react';
+import { ArrowLeft, Plus, X, Save, Upload, Image as ImageIcon, Code, Palette, Briefcase, MessageCircle, Video, Globe, FileText } from 'lucide-react';
 
 // Category configuration with icons and colors (same as PackageList)
 const CATEGORIES = {
@@ -15,12 +15,15 @@ const CATEGORIES = {
 function CreatePackage({ onCreate }) {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const jsonFileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [showCustomCategory, setShowCustomCategory] = useState(false);
+  const [inputMode, setInputMode] = useState('manual'); // 'manual' or 'json'
+  const [jsonError, setJsonError] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -175,6 +178,107 @@ function CreatePackage({ onCreate }) {
     } else {
       setShowCustomCategory(false);
       setFormData(prev => ({ ...prev, category: selectedValue }));
+    }
+  };
+
+  const validateKeyWizardJson = (jsonData) => {
+    // Check if it has the required structure
+    if (!jsonData.Name || !jsonData.Shortcuts || !Array.isArray(jsonData.Shortcuts)) {
+      return {
+        valid: false,
+        error: 'Invalid JSON format. The file must contain "Name" and "Shortcuts" fields, where "Shortcuts" is an array.'
+      };
+    }
+
+    // Validate each shortcut
+    for (let i = 0; i < jsonData.Shortcuts.length; i++) {
+      const shortcut = jsonData.Shortcuts[i];
+      
+      if (!shortcut.Description || !shortcut.Keys || !Array.isArray(shortcut.Keys)) {
+        return {
+          valid: false,
+          error: `Shortcut ${i + 1} is invalid. Each shortcut must have "Description" and "Keys" fields, where "Keys" is an array.`
+        };
+      }
+
+      if (shortcut.Keys.length === 0) {
+        return {
+          valid: false,
+          error: `Shortcut ${i + 1} has no keys. The "Keys" array must contain at least one key.`
+        };
+      }
+
+      // Validate that keys are strings
+      for (let j = 0; j < shortcut.Keys.length; j++) {
+        if (typeof shortcut.Keys[j] !== 'string' || shortcut.Keys[j].trim() === '') {
+          return {
+            valid: false,
+            error: `Shortcut ${i + 1}, key ${j + 1} is invalid. All keys must be non-empty strings.`
+          };
+        }
+      }
+    }
+
+    return { valid: true };
+  };
+
+  const convertKeyWizardToShortcuts = (jsonData) => {
+    return jsonData.Shortcuts.map(shortcut => ({
+      key: shortcut.Keys.join('+'),
+      action: shortcut.Description,
+      description: shortcut.Description
+    }));
+  };
+
+  const handleJsonFileInput = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+      setJsonError('Please select a valid JSON file (.json)');
+      return;
+    }
+
+    // Validate file size (1MB)
+    if (file.size > 1024 * 1024) {
+      setJsonError('File size must be less than 1MB');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const jsonData = JSON.parse(e.target.result);
+        const validation = validateKeyWizardJson(jsonData);
+        
+        if (!validation.valid) {
+          setJsonError(validation.error);
+          return;
+        }
+
+        // Convert KeyWizard format to our internal format
+        const shortcuts = convertKeyWizardToShortcuts(jsonData);
+        
+        // Update form data
+        setFormData(prev => ({
+          ...prev,
+          name: jsonData.Name || prev.name,
+          shortcuts: shortcuts
+        }));
+        
+        setJsonError(null);
+      } catch (error) {
+        setJsonError('Invalid JSON format. Please check your file and try again.');
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const clearJsonError = () => {
+    setJsonError(null);
+    if (jsonFileInputRef.current) {
+      jsonFileInputRef.current.value = '';
     }
   };
 
@@ -366,59 +470,230 @@ function CreatePackage({ onCreate }) {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3>Shortcuts <span style={{ color: '#ff6b6b' }}>*</span></h3>
-              <button type="button" onClick={addShortcut} className="btn btn-secondary">
-                <Plus size={16} style={{ marginRight: '0.5rem' }} />
-                Add Shortcut
-              </button>
-            </div>
-            
-            <div style={{ marginBottom: '1rem' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr auto', gap: '1rem', marginBottom: '0.5rem', fontSize: '0.9rem', opacity: 0.8 }}>
-                <span>Key Combination</span>
-                <span>Action</span>
-                <span>Description</span>
-                <span></span>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setInputMode('manual')}
+                  className={`btn ${inputMode === 'manual' ? '' : 'btn-secondary'}`}
+                  style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
+                >
+                  Manual Entry
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setInputMode('json')}
+                  className={`btn ${inputMode === 'json' ? '' : 'btn-secondary'}`}
+                  style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
+                >
+                  <FileText size={16} style={{ marginRight: '0.5rem' }} />
+                  Upload JSON
+                </button>
               </div>
             </div>
-            
-            {formData.shortcuts.map((shortcut, index) => (
-              <div key={index} className="shortcut-item">
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr auto', gap: '1rem', width: '100%' }}>
+
+            {inputMode === 'json' && (
+              <div style={{ marginBottom: '2rem' }}>
+                <div style={{
+                  border: '2px dashed rgba(255,255,255,0.3)',
+                  borderRadius: '8px',
+                  padding: '2rem',
+                  textAlign: 'center',
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                  transition: 'all 0.2s ease',
+                  cursor: 'pointer',
+                  position: 'relative'
+                }}
+                onClick={() => jsonFileInputRef.current?.click()}
+                >
                   <input
-                    type="text"
-                    className="input"
-                    value={shortcut.key}
-                    onChange={(e) => updateShortcut(index, 'key', e.target.value)}
-                    placeholder="Ctrl+S"
-                    required={index === 0}
+                    ref={jsonFileInputRef}
+                    type="file"
+                    accept=".json,application/json"
+                    onChange={handleJsonFileInput}
+                    style={{ display: 'none' }}
                   />
-                  <input
-                    type="text"
-                    className="input"
-                    value={shortcut.action}
-                    onChange={(e) => updateShortcut(index, 'action', e.target.value)}
-                    placeholder="Save"
-                  />
-                  <input
-                    type="text"
-                    className="input"
-                    value={shortcut.description}
-                    onChange={(e) => updateShortcut(index, 'description', e.target.value)}
-                    placeholder="Save the current file"
-                  />
-                  {formData.shortcuts.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeShortcut(index)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.7)' }}
-                      title="Remove shortcut"
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
+                  
+                  <div>
+                    <FileText size={48} style={{ marginBottom: '1rem', opacity: 0.7 }} />
+                    <p style={{ marginBottom: '0.5rem', fontSize: '1.1rem' }}>
+                      Upload KeyWizard JSON File
+                    </p>
+                    <p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1rem' }}>
+                      Click to browse or drag & drop
+                    </p>
+                    <div style={{ fontSize: '0.85rem', opacity: 0.6 }}>
+                      JSON files up to 1MB
+                    </div>
+                  </div>
+                </div>
+                
+                {jsonError && (
+                  <div style={{
+                    backgroundColor: 'rgba(255,107,107,0.1)',
+                    border: '1px solid #ff6b6b',
+                    borderRadius: '8px',
+                    padding: '1rem',
+                    marginTop: '1rem',
+                    color: '#ff6b6b'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div>
+                        <strong>JSON Format Error:</strong>
+                        <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem' }}>{jsonError}</p>
+                        <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.85rem', opacity: 0.8 }}>
+                          Please ensure your JSON follows the KeyWizard format:
+                        </p>
+                        <pre style={{
+                          backgroundColor: 'rgba(0,0,0,0.2)',
+                          padding: '0.5rem',
+                          borderRadius: '4px',
+                          fontSize: '0.8rem',
+                          marginTop: '0.5rem',
+                          overflow: 'auto'
+                        }}>
+{`{
+  "Name": "Photoshop Essentials",
+  "Shortcuts": [
+    {
+      "Description": "Undo last action",
+      "Keys": [ "CTRL", "Z" ]
+    },
+    {
+      "Description": "Redo last action",
+      "Keys": [ "CTRL", "SHIFT", "Z" ]
+    },
+    {
+      "Description": "Select brush tool",
+      "Keys": [ "B" ]
+    }
+  ]
+}`}
+                        </pre>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={clearJsonError}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          color: '#ff6b6b',
+                          fontSize: '1.2rem',
+                          padding: '0'
+                        }}
+                        title="Clear error"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
+                <div style={{
+                  backgroundColor: 'rgba(0,122,204,0.1)',
+                  border: '1px solid #007acc',
+                  borderRadius: '8px',
+                  padding: '1rem',
+                  marginTop: '1rem'
+                }}>
+                  <h4 style={{ margin: '0 0 0.5rem 0', color: '#007acc' }}>KeyWizard JSON Format</h4>
+                  <p style={{ margin: '0', fontSize: '0.9rem', opacity: 0.8 }}>
+                    Your JSON file must follow this exact format to be compatible with KeyWizard:
+                  </p>
+                  <ul style={{ margin: '0.5rem 0 0 0', fontSize: '0.85rem', opacity: 0.8, paddingLeft: '1.5rem' }}>
+                    <li><strong>Name:</strong> The package name</li>
+                    <li><strong>Shortcuts:</strong> Array of shortcut objects</li>
+                    <li><strong>Description:</strong> What the shortcut does</li>
+                    <li><strong>Keys:</strong> Array of individual keys (e.g., ["CTRL", "S"])</li>
+                  </ul>
                 </div>
               </div>
-            ))}
+            )}
+            
+            {inputMode === 'manual' && (
+              <>
+                <div style={{ marginBottom: '1rem' }}>
+                  <button type="button" onClick={addShortcut} className="btn btn-secondary">
+                    <Plus size={16} style={{ marginRight: '0.5rem' }} />
+                    Add Shortcut
+                  </button>
+                </div>
+                
+                <div style={{ marginBottom: '1rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr auto', gap: '1rem', marginBottom: '0.5rem', fontSize: '0.9rem', opacity: 0.8 }}>
+                    <span>Key Combination</span>
+                    <span>Action</span>
+                    <span>Description</span>
+                    <span></span>
+                  </div>
+                </div>
+                
+                {formData.shortcuts.map((shortcut, index) => (
+                  <div key={index} className="shortcut-item">
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr auto', gap: '1rem', width: '100%' }}>
+                      <input
+                        type="text"
+                        className="input"
+                        value={shortcut.key}
+                        onChange={(e) => updateShortcut(index, 'key', e.target.value)}
+                        placeholder="Ctrl+S"
+                        required={index === 0}
+                      />
+                      <input
+                        type="text"
+                        className="input"
+                        value={shortcut.action}
+                        onChange={(e) => updateShortcut(index, 'action', e.target.value)}
+                        placeholder="Save"
+                      />
+                      <input
+                        type="text"
+                        className="input"
+                        value={shortcut.description}
+                        onChange={(e) => updateShortcut(index, 'description', e.target.value)}
+                        placeholder="Save the current file"
+                      />
+                      {formData.shortcuts.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeShortcut(index)}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.7)' }}
+                          title="Remove shortcut"
+                        >
+                          <X size={16} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+
+            {inputMode === 'json' && formData.shortcuts.length > 0 && (
+              <div style={{ marginTop: '1rem' }}>
+                <h4 style={{ marginBottom: '1rem' }}>Imported Shortcuts ({formData.shortcuts.length})</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr', gap: '1rem', marginBottom: '0.5rem', fontSize: '0.9rem', opacity: 0.8 }}>
+                  <span>Key Combination</span>
+                  <span>Action</span>
+                  <span>Description</span>
+                </div>
+                {formData.shortcuts.map((shortcut, index) => (
+                  <div key={index} style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr 2fr',
+                    gap: '1rem',
+                    padding: '0.75rem',
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    borderRadius: '8px',
+                    marginBottom: '0.5rem'
+                  }}>
+                    <span style={{ fontFamily: 'monospace' }}>{shortcut.key}</span>
+                    <span>{shortcut.action}</span>
+                    <span>{shortcut.description}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
