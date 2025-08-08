@@ -606,6 +606,36 @@ function CreatePackage({ onCreate }) {
                     <li><strong>Description:</strong> What the shortcut does</li>
                     <li><strong>Keys:</strong> Array of individual keys (e.g., ["CTRL", "S"])</li>
                   </ul>
+                  
+                  <div style={{ marginTop: '1rem' }}>
+                    <strong>Example:</strong>
+                    <pre style={{
+                      backgroundColor: 'rgba(0,0,0,0.2)',
+                      padding: '0.75rem',
+                      borderRadius: '4px',
+                      fontSize: '0.8rem',
+                      marginTop: '0.5rem',
+                      overflow: 'auto'
+                    }}>
+{`{
+  "Name": "Photoshop Essentials",
+  "Shortcuts": [
+    {
+      "Description": "Undo last action",
+      "Keys": [ "CTRL", "Z" ]
+    },
+    {
+      "Description": "Redo last action",
+      "Keys": [ "CTRL", "SHIFT", "Z" ]
+    },
+    {
+      "Description": "Select brush tool",
+      "Keys": [ "B" ]
+    }
+  ]
+}`}
+                    </pre>
+                  </div>
                 </div>
               </div>
             )}
