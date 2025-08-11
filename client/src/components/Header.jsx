@@ -52,6 +52,12 @@ function Header() {
                 <Search size={16} /> Browse
               </Link>
             )}
+            {!user && (
+              <Link to="/login" className="btn" style={{ marginLeft: '1rem' }}>
+                <LogIn size={16} style={{ marginRight: '0.5rem' }} />
+                Log In
+              </Link>
+            )}
           </div>
           <nav className="nav">
             {user ? (
@@ -83,12 +89,7 @@ function Header() {
                   Logout
                 </button>
               </>
-            ) : (
-              <Link to="/login" className="btn">
-                <LogIn size={16} style={{ marginRight: '0.5rem' }} />
-                Sign In
-              </Link>
-            )}
+            ) : null}
           </nav>
         </div>
       </div>

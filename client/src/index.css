@@ -34,7 +34,7 @@ body {
 
 /* Modern UI Components */
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -75,7 +75,7 @@ body {
 }
 
 .btn-secondary {
-  background: #f7f2e7;
+  background: #fffdfa;
   color: #232323;
   border: 1px solid #e5e1d8;
 }
@@ -109,14 +109,13 @@ body {
 .grid {
   display: grid;
   gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
 /* Header */
 .header {
-  background: #fffdfa;
+  background: #f7f2e7;
   padding: 1rem 0;
-  box-shadow: 0 2px 8px rgba(44,39,33,0.08);
   position: sticky;
   top: 0;
   z-index: 100;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, Trash2, Edit, Download, Star, User, Clipboard, Code, Palette, Briefcase, MessageCircle, Video, Globe, Search } from 'lucide-react';
+import { ExternalLink, Trash2, Edit, Download, Star, User, Clipboard, Code, Palette, Briefcase, MessageCircle, Video, Globe, Search, Plus, LogIn } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useMemo, useRef, useCallback } from 'react';
 import Toast from './Toast';
@@ -218,89 +218,171 @@ function PackageList({ packages, loading, onDelete }) {
       flexDirection: 'row', 
       alignItems: 'center', 
       justifyContent: 'space-between', 
-      margin: '2.5rem 0 2rem 0',
-      maxWidth: '1200px',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      padding: '0 2rem'
+      margin: '0',
+      width: '100vw',
+      marginLeft: 'calc(-50vw + 50%)',
+      marginRight: 'calc(-50vw + 50%)',
+      padding: '0 2rem',
+      minHeight: '60vh',
+      position: 'relative',
+      overflow: 'hidden'
     }}>
       {/* Left side - Text content */}
       <div style={{
         flex: '1',
-        maxWidth: '600px'
+        maxWidth: '700px',
+        position: 'relative',
+        zIndex: 2,
+        marginLeft: 'calc(50vw - 50% + 2rem)'
       }}>
-        <h1 style={{ 
-          fontSize: '4.5rem', 
-          fontWeight: 800, 
+        <p style={{ 
+          fontSize: '1.3rem', 
+          fontWeight: '500', 
           margin: '0 0 1rem 0', 
+          color: '#6d665b', 
+          letterSpacing: '0.5px',
+          textTransform: 'lowercase'
+        }}>
+          key-wizard.com
+        </p>
+        <h1 style={{ 
+          fontSize: '6rem', 
+          fontWeight: 800, 
+          margin: '0 0 3rem 0', 
           color: '#232323', 
-          letterSpacing: '-2px', 
+          letterSpacing: '-3px', 
           textAlign: 'left',
           lineHeight: '1.1'
         }}>
-          KeyWizard
+          Equip your KeyWizard.
         </h1>
-        <p style={{ 
-          fontSize: '1.4rem', 
-          color: '#6d665b', 
-          margin: '0 0 2rem 0',
-          lineHeight: '1.4',
-          fontWeight: '600'
-        }}>
-          The future of Windows productivity and accessibility.
-        </p>
         
-        {/* Microsoft Store Download Button */}
-        <a 
-          href="https://apps.microsoft.com/detail/9nf4pjffzzms?hl=en-US&gl=US" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-block',
-            transition: 'all 0.2s ease',
-            cursor: 'pointer'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.filter = 'brightness(1.1)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.filter = 'brightness(1)';
-          }}
-        >
-          <img 
-            src="/images/DownloadButton.png" 
-            alt="Download from Microsoft Store" 
-            style={{ 
-              height: '60px', 
-              width: 'auto',
-              display: 'block'
-            }} 
-          />
-        </a>
+        {/* Buttons */}
+        <div style={{
+          display: 'flex',
+          gap: '1.5rem',
+          alignItems: 'center',
+          flexWrap: 'wrap'
+        }}>
+          {/* Sign Up Button (only when not signed in) */}
+          {!user && (
+            <Link to="/create" className="btn" style={{ 
+              fontSize: '1.3rem', 
+              padding: '1rem 2rem',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              <Plus size={24} />
+              Sign Up
+            </Link>
+          )}
+          
+          {/* Profile Button (only when signed in) */}
+          {user && (
+            <Link to="/profile" className="btn btn-secondary" style={{ 
+              fontSize: '1.3rem', 
+              padding: '1rem 2rem',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              {user.avatar_url && !imageErrors.has(user.id) ? (
+                <img 
+                  src={user.avatar_url} 
+                  alt={user.username || user.displayName || 'User'}
+                  style={{ 
+                    width: '24px', 
+                    height: '24px', 
+                    borderRadius: '50%',
+                    marginRight: '0.5rem'
+                  }}
+                  onError={() => handleImageError(user.id)}
+                />
+              ) : (
+                <User size={24} />
+              )}
+              {user.username || user.displayName || 'Profile'}
+            </Link>
+          )}
+          
+          {/* Microsoft Store Download Button */}
+          <a 
+            href="https://apps.microsoft.com/detail/9nf4pjffzzms?hl=en-US&gl=US" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.filter = 'brightness(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.filter = 'brightness(1)';
+            }}
+          >
+            <img 
+              src="/images/DownloadButton.png" 
+              alt="Download from Microsoft Store" 
+              style={{ 
+                height: '80px', 
+                width: 'auto',
+                display: 'block'
+              }} 
+            />
+          </a>
+        </div>
       </div>
 
-      {/* Right side - Large Image */}
+      {/* Right side - Large Video */}
       <div style={{
-        flex: '1',
+        position: 'absolute',
+        top: '-2rem',
+        left: 'calc(50vw - 50% + 700px + 4rem)',
+        right: 0,
+        height: 'calc(100% + 2rem)',
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        zIndex: 0
       }}>
-        <img 
-          src="/images/example.png" 
-          alt="KeyWizard Example" 
+        <video 
+          src="/images/Key Wizard Promo (1).mp4" 
+          alt="KeyWizard Promo" 
           style={{ 
-            width: '700px', 
-            height: 'auto',
-            maxWidth: '100%',
-            borderRadius: '12px',
-            boxShadow: '0 8px 32px rgba(44,39,33,0.15)',
-            transform: 'scale(1.1)',
-            transformOrigin: 'center'
-          }} 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover',
+            borderRadius: '20px 0 0 20px',
+            //boxShadow: '0 12px 48px rgba(44,39,33,0.15)'
+          }}
+          autoPlay
+          muted
+          loop
+          playsInline
         />
+        
+        {/* Fading effect overlay */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          borderRadius: '20px 0 0 20px',
+          background: `
+            linear-gradient(to bottom, transparent 0%, transparent 60%, #f7f2e7 100%),
+            linear-gradient(to right, #f7f2e7 0%, transparent 30%, transparent 100%)
+          `,
+          pointerEvents: 'none',
+          zIndex: 1
+        }} />
       </div>
     </div>
   );
@@ -727,12 +809,105 @@ function PackageList({ packages, loading, onDelete }) {
         
         <div className="grid" style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
           gap: '1.5rem' 
         }}>
           {categoryPackages.map((pkg) => (
             <PackageCard key={pkg.id} pkg={pkg} />
           ))}
+          
+          {/* Create Package Button */}
+          {user && (
+            <Link 
+              to="/create" 
+              style={{
+                textDecoration: 'none', 
+                color: 'inherit',
+                display: 'block'
+              }}
+            >
+              <div className="card" style={{
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                border: '2px dashed #e5e1d8',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '400px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.borderColor = '#232323';
+                e.currentTarget.style.background = '#f7f2e7';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.borderColor = '#e5e1d8';
+                e.currentTarget.style.background = '#fffdfa';
+              }}
+              >
+                {/* Package Image Area */}
+                <div style={{
+                  height: '200px',
+                  background: '#ffffff',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%'
+                }}>
+                  <div style={{
+                    width: '80px',
+                    height: '80px',
+                    borderRadius: '50%',
+                    background: '#232323',
+                    color: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '3rem',
+                    fontWeight: 'bold'
+                  }}>
+                    +
+                  </div>
+                </div>
+                
+                {/* Package Info */}
+                <div style={{
+                  padding: '1rem',
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center'
+                }}>
+                  <h3 style={{ 
+                    margin: '0 0 0.5rem 0',
+                    fontSize: '1.2rem',
+                    fontWeight: '600',
+                    color: '#232323'
+                  }}>
+                    Create Package
+                  </h3>
+                  
+                  <p style={{
+                    margin: 0,
+                    fontSize: '0.9rem',
+                    color: '#6d665b',
+                    lineHeight: '1.4'
+                  }}>
+                    Add your own keyboard shortcut collection
+                  </p>
+                </div>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     );
@@ -802,12 +977,105 @@ function PackageList({ packages, loading, onDelete }) {
           
           <div className="grid" style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
             gap: '1.5rem' 
           }}>
             {searchFilteredPackages.map((pkg) => (
               <PackageCard key={pkg.id} pkg={pkg} showCategoryIcon={true} />
             ))}
+            
+            {/* Create Package Button */}
+            {user && (
+              <Link 
+                to="/create" 
+                style={{
+                  textDecoration: 'none', 
+                  color: 'inherit',
+                  display: 'block'
+                }}
+              >
+                <div className="card" style={{
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  border: '2px dashed #e5e1d8',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: '400px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.borderColor = '#232323';
+                  e.currentTarget.style.background = '#f7f2e7';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = '#e5e1d8';
+                  e.currentTarget.style.background = '#fffdfa';
+                }}
+                >
+                  {/* Package Image Area */}
+                  <div style={{
+                    height: '200px',
+                    background: '#ffffff',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%'
+                  }}>
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      background: '#232323',
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '3rem',
+                      fontWeight: 'bold'
+                    }}>
+                      +
+                    </div>
+                  </div>
+                  
+                  {/* Package Info */}
+                  <div style={{
+                    padding: '1rem',
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    textAlign: 'center'
+                  }}>
+                    <h3 style={{ 
+                      margin: '0 0 0.5rem 0',
+                      fontSize: '1.2rem',
+                      fontWeight: '600',
+                      color: '#232323'
+                    }}>
+                      Create Package
+                    </h3>
+                    
+                    <p style={{
+                      margin: 0,
+                      fontSize: '0.9rem',
+                      color: '#6d665b',
+                      lineHeight: '1.4'
+                    }}>
+                      Add your own keyboard shortcut collection
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            )}
           </div>
         </div>
       ) : (
@@ -821,12 +1089,105 @@ function PackageList({ packages, loading, onDelete }) {
           // Show filtered packages in a single grid
           <div className="grid" style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
             gap: '1.5rem' 
           }}>
             {filteredPackages.map((pkg) => (
               <PackageCard key={pkg.id} pkg={pkg} />
             ))}
+            
+            {/* Create Package Button */}
+            {user && (
+              <Link 
+                to="/create" 
+                style={{
+                  textDecoration: 'none', 
+                  color: 'inherit',
+                  display: 'block'
+                }}
+              >
+                <div className="card" style={{
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  border: '2px dashed #e5e1d8',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: '400px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.borderColor = '#232323';
+                  e.currentTarget.style.background = '#f7f2e7';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = '#e5e1d8';
+                  e.currentTarget.style.background = '#fffdfa';
+                }}
+                >
+                  {/* Package Image Area */}
+                  <div style={{
+                    height: '200px',
+                    background: '#ffffff',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%'
+                  }}>
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      background: '#232323',
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '3rem',
+                      fontWeight: 'bold'
+                    }}>
+                      +
+                    </div>
+                  </div>
+                  
+                  {/* Package Info */}
+                  <div style={{
+                    padding: '1rem',
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    textAlign: 'center'
+                  }}>
+                    <h3 style={{ 
+                      margin: '0 0 0.5rem 0',
+                      fontSize: '1.2rem',
+                      fontWeight: '600',
+                      color: '#232323'
+                    }}>
+                      Create Package
+                    </h3>
+                    
+                    <p style={{
+                      margin: 0,
+                      fontSize: '0.9rem',
+                      color: '#6d665b',
+                      lineHeight: '1.4'
+                    }}>
+                      Add your own keyboard shortcut collection
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            )}
           </div>
         )
       )}

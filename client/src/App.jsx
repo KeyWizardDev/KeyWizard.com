@@ -156,7 +156,7 @@ function AppContent() {
 
   return (
     <div className="App">
-      <Header />
+      {/* <Header /> */}
       <main className="container">
         <Routes>
           <Route 

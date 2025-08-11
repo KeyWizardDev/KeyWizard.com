@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, X, Save, Upload, Image as ImageIcon, Code, Palette, Briefcase, MessageCircle, Video, Globe, FileText } from 'lucide-react';
+import { ArrowLeft, Plus, X, Save, Upload, Image as ImageIcon, Code, Palette, Briefcase, MessageCircle, Video, Globe, FileText, CheckCircle } from 'lucide-react';
 
 // Category configuration with icons and colors (same as PackageList)
 const CATEGORIES = {
@@ -24,6 +24,8 @@ function CreatePackage({ onCreate }) {
   const [showCustomCategory, setShowCustomCategory] = useState(false);
   const [inputMode, setInputMode] = useState('manual'); // 'manual' or 'json'
   const [jsonError, setJsonError] = useState(null);
+  const [jsonSuccess, setJsonSuccess] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -237,12 +239,16 @@ function CreatePackage({ onCreate }) {
     // Validate file type
     if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
       setJsonError('Please select a valid JSON file (.json)');
+      setJsonSuccess(false);
+      setUploadedFileName(null);
       return;
     }
 
     // Validate file size (1MB)
     if (file.size > 1024 * 1024) {
       setJsonError('File size must be less than 1MB');
+      setJsonSuccess(false);
+      setUploadedFileName(null);
       return;
     }
 
@@ -254,6 +260,8 @@ function CreatePackage({ onCreate }) {
         
         if (!validation.valid) {
           setJsonError(validation.error);
+          setJsonSuccess(false);
+          setUploadedFileName(null);
           return;
         }
 
@@ -267,9 +275,20 @@ function CreatePackage({ onCreate }) {
           shortcuts: shortcuts
         }));
         
+        // Show success notification and store filename
         setJsonError(null);
+        setJsonSuccess(true);
+        setUploadedFileName(file.name);
+        
+        // Auto-hide success notification after 3 seconds
+        setTimeout(() => {
+          setJsonSuccess(false);
+        }, 3000);
+        
       } catch (error) {
         setJsonError('Invalid JSON format. Please check your file and try again.');
+        setJsonSuccess(false);
+        setUploadedFileName(null);
       }
     };
     reader.readAsText(file);
@@ -277,6 +296,21 @@ function CreatePackage({ onCreate }) {
 
   const clearJsonError = () => {
     setJsonError(null);
+    setJsonSuccess(false);
+    setUploadedFileName(null);
+    if (jsonFileInputRef.current) {
+      jsonFileInputRef.current.value = '';
+    }
+  };
+
+  const clearUploadedJson = () => {
+    setJsonError(null);
+    setJsonSuccess(false);
+    setUploadedFileName(null);
+    setFormData(prev => ({
+      ...prev,
+      shortcuts: [{ key: '', action: '', description: '' }]
+    }));
     if (jsonFileInputRef.current) {
       jsonFileInputRef.current.value = '';
     }
@@ -473,7 +507,16 @@ function CreatePackage({ onCreate }) {
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button
                   type="button"
-                  onClick={() => setInputMode('manual')}
+                  onClick={() => {
+                    setInputMode('manual');
+                    // Clear JSON state when switching to manual mode
+                    setJsonError(null);
+                    setJsonSuccess(false);
+                    setUploadedFileName(null);
+                    if (jsonFileInputRef.current) {
+                      jsonFileInputRef.current.value = '';
+                    }
+                  }}
                   className={`btn ${inputMode === 'manual' ? '' : 'btn-secondary'}`}
                   style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
                 >
@@ -493,39 +536,112 @@ function CreatePackage({ onCreate }) {
 
             {inputMode === 'json' && (
               <div style={{ marginBottom: '2rem' }}>
-                <div style={{
-                  border: '2px dashed rgba(255,255,255,0.3)',
-                  borderRadius: '8px',
-                  padding: '2rem',
-                  textAlign: 'center',
-                  backgroundColor: 'rgba(255,255,255,0.05)',
-                  transition: 'all 0.2s ease',
-                  cursor: 'pointer',
-                  position: 'relative'
-                }}
-                onClick={() => jsonFileInputRef.current?.click()}
-                >
-                  <input
-                    ref={jsonFileInputRef}
-                    type="file"
-                    accept=".json,application/json"
-                    onChange={handleJsonFileInput}
-                    style={{ display: 'none' }}
-                  />
-                  
-                  <div>
-                    <FileText size={48} style={{ marginBottom: '1rem', opacity: 0.7 }} />
-                    <p style={{ marginBottom: '0.5rem', fontSize: '1.1rem' }}>
-                      Upload KeyWizard JSON File
-                    </p>
-                    <p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1rem' }}>
-                      Click to browse or drag & drop
-                    </p>
-                    <div style={{ fontSize: '0.85rem', opacity: 0.6 }}>
-                      JSON files up to 1MB
+                {/* Success Notification */}
+                {jsonSuccess && (
+                  <div style={{
+                    backgroundColor: 'rgba(34,197,94,0.1)',
+                    border: '1px solid #22c55e',
+                    borderRadius: '8px',
+                    padding: '1rem',
+                    marginBottom: '1rem',
+                    color: '#22c55e',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <CheckCircle size={20} />
+                    <div>
+                      <strong>JSON file uploaded successfully!</strong>
+                      <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.9rem', opacity: 0.8 }}>
+                        {uploadedFileName} has been processed and shortcuts have been imported.
+                      </p>
                     </div>
                   </div>
-                </div>
+                )}
+
+                {/* File Upload Area */}
+                {!uploadedFileName ? (
+                  <div style={{
+                    border: '2px dashed rgba(255,255,255,0.3)',
+                    borderRadius: '8px',
+                    padding: '2rem',
+                    textAlign: 'center',
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    transition: 'all 0.2s ease',
+                    cursor: 'pointer',
+                    position: 'relative'
+                  }}
+                  onClick={() => jsonFileInputRef.current?.click()}
+                  >
+                    <input
+                      ref={jsonFileInputRef}
+                      type="file"
+                      accept=".json,application/json"
+                      onChange={handleJsonFileInput}
+                      style={{ display: 'none' }}
+                    />
+                    
+                    <div>
+                      <FileText size={48} style={{ marginBottom: '1rem', opacity: 0.7 }} />
+                      <p style={{ marginBottom: '0.5rem', fontSize: '1.1rem' }}>
+                        Upload KeyWizard JSON File
+                      </p>
+                      <p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1rem' }}>
+                        Click to browse or drag & drop
+                      </p>
+                      <div style={{ fontSize: '0.85rem', opacity: 0.6 }}>
+                        JSON files up to 1MB
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* File Uploaded Placeholder */
+                  <div style={{
+                    border: '1px solid rgba(34,197,94,0.3)',
+                    borderRadius: '8px',
+                    padding: '1rem',
+                    backgroundColor: 'rgba(34,197,94,0.05)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <CheckCircle size={24} style={{ color: '#22c55e' }} />
+                      <div>
+                        <p style={{ margin: '0', fontWeight: '500', color: '#22c55e' }}>
+                          {uploadedFileName}
+                        </p>
+                        <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', opacity: 0.7 }}>
+                          {formData.shortcuts.length} shortcuts imported
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={clearUploadedJson}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: 'rgba(255,255,255,0.7)',
+                        padding: '0.25rem',
+                        borderRadius: '4px',
+                        transition: 'all 0.2s ease'
+                      }}
+                      title="Remove uploaded file"
+                      onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = 'rgba(255,255,255,0.1)';
+                        e.target.style.color = '#ff6b6b';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = 'transparent';
+                        e.target.style.color = 'rgba(255,255,255,0.7)';
+                      }}
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                )}
                 
                 {jsonError && (
                   <div style={{
