@@ -13,7 +13,7 @@ KeyWizard.com is designed to be the go-to destination for keyboard shortcut enth
 - **Discover** shortcut packages for popular applications and workflows
 - **Share** custom shortcut collections with the community
 - **Download** shortcut packages in KeyWizard-compatible JSON format
-- **Collaborate** on improving productivity through better keyboard shortcuts
+- **Collaborate** on improving productivity through better keyboard shortcuts.
 
 The website works in conjunction with the **KeyWizard desktop application**, which is available on the Microsoft Store:
 
@@ -102,8 +102,16 @@ The KeyWizard desktop application allows you to:
 - **Community**: All contributors and users who share their shortcut packages
 - **Open Source**: Built with amazing open-source tools and libraries
 
+## ✍️ Authors
+
+- Laurie Byrne: https://github.com/Byrnel68
+- Ciaran Coady: https://github.com/ciarancoady98
+- Kamil Przepiorowski: https://github.com/kamilprz 
+
+
 ---
 
 **KeyWizard.com** — Empowering productivity through keyboard shortcuts! ⌨️✨
+
 
 *Connect with the KeyWizard desktop app to unlock the full potential of your keyboard shortcuts.*
