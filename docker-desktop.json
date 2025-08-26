@@ -1,0 +1,121 @@
+{
+  "Name": "Docker Desktop - Container Management",
+  "Shortcuts": [
+    {
+      "Description": "Open Docker Desktop",
+      "Keys": ["CTRL", "SHIFT", "D"]
+    },
+    {
+      "Description": "Focus on containers list",
+      "Keys": ["CTRL", "1"]
+    },
+    {
+      "Description": "Focus on images list",
+      "Keys": ["CTRL", "2"]
+    },
+    {
+      "Description": "Focus on volumes list",
+      "Keys": ["CTRL", "3"]
+    },
+    {
+      "Description": "Focus on networks list",
+      "Keys": ["CTRL", "4"]
+    },
+    {
+      "Description": "Focus on settings",
+      "Keys": ["CTRL", "5"]
+    },
+    {
+      "Description": "Start selected container",
+      "Keys": ["CTRL", "ENTER"]
+    },
+    {
+      "Description": "Stop selected container",
+      "Keys": ["CTRL", "SHIFT", "ENTER"]
+    },
+    {
+      "Description": "Restart selected container",
+      "Keys": ["CTRL", "R"]
+    },
+    {
+      "Description": "Remove selected container",
+      "Keys": ["DELETE"]
+    },
+    {
+      "Description": "Force remove selected container",
+      "Keys": ["SHIFT", "DELETE"]
+    },
+    {
+      "Description": "View container logs",
+      "Keys": ["CTRL", "L"]
+    },
+    {
+      "Description": "Open container shell",
+      "Keys": ["CTRL", "SHIFT", "S"]
+    },
+    {
+      "Description": "Copy container ID",
+      "Keys": ["CTRL", "C"]
+    },
+    {
+      "Description": "Search containers",
+      "Keys": ["CTRL", "F"]
+    },
+    {
+      "Description": "Refresh containers list",
+      "Keys": ["F5"]
+    },
+    {
+      "Description": "Build image from Dockerfile",
+      "Keys": ["CTRL", "B"]
+    },
+    {
+      "Description": "Pull image from registry",
+      "Keys": ["CTRL", "P"]
+    },
+    {
+      "Description": "Push image to registry",
+      "Keys": ["CTRL", "SHIFT", "P"]
+    },
+    {
+      "Description": "Remove selected image",
+      "Keys": ["CTRL", "DELETE"]
+    },
+    {
+      "Description": "Inspect container/image",
+      "Keys": ["CTRL", "I"]
+    },
+    {
+      "Description": "View container stats",
+      "Keys": ["CTRL", "T"]
+    },
+    {
+      "Description": "Create new container",
+      "Keys": ["CTRL", "N"]
+    },
+    {
+      "Description": "Compose up",
+      "Keys": ["CTRL", "U"]
+    },
+    {
+      "Description": "Compose down",
+      "Keys": ["CTRL", "SHIFT", "U"]
+    },
+    {
+      "Description": "Toggle Docker Desktop",
+      "Keys": ["CTRL", "SHIFT", "D"]
+    },
+    {
+      "Description": "Open Docker Hub",
+      "Keys": ["CTRL", "H"]
+    },
+    {
+      "Description": "Open documentation",
+      "Keys": ["F1"]
+    },
+    {
+      "Description": "Quit Docker Desktop",
+      "Keys": ["CTRL", "Q"]
+    }
+  ]
+}

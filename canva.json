@@ -1,0 +1,393 @@
+{
+  "Name": "Canva - Quick Design Creation",
+  "Shortcuts": [
+    {
+      "Description": "New design",
+      "Keys": ["CTRL", "N"]
+    },
+    {
+      "Description": "Open design",
+      "Keys": ["CTRL", "O"]
+    },
+    {
+      "Description": "Save",
+      "Keys": ["CTRL", "S"]
+    },
+    {
+      "Description": "Save as",
+      "Keys": ["CTRL", "SHIFT", "S"]
+    },
+    {
+      "Description": "Download",
+      "Keys": ["CTRL", "D"]
+    },
+    {
+      "Description": "Share",
+      "Keys": ["CTRL", "SHIFT", "E"]
+    },
+    {
+      "Description": "Print",
+      "Keys": ["CTRL", "P"]
+    },
+    {
+      "Description": "Close design",
+      "Keys": ["CTRL", "W"]
+    },
+    {
+      "Description": "Undo",
+      "Keys": ["CTRL", "Z"]
+    },
+    {
+      "Description": "Redo",
+      "Keys": ["CTRL", "Y"]
+    },
+    {
+      "Description": "Cut",
+      "Keys": ["CTRL", "X"]
+    },
+    {
+      "Description": "Copy",
+      "Keys": ["CTRL", "C"]
+    },
+    {
+      "Description": "Paste",
+      "Keys": ["CTRL", "V"]
+    },
+    {
+      "Description": "Duplicate",
+      "Keys": ["CTRL", "D"]
+    },
+    {
+      "Description": "Delete",
+      "Keys": ["DELETE"]
+    },
+    {
+      "Description": "Select all",
+      "Keys": ["CTRL", "A"]
+    },
+    {
+      "Description": "Deselect",
+      "Keys": ["ESC"]
+    },
+    {
+      "Description": "Group",
+      "Keys": ["CTRL", "G"]
+    },
+    {
+      "Description": "Ungroup",
+      "Keys": ["CTRL", "SHIFT", "G"]
+    },
+    {
+      "Description": "Lock",
+      "Keys": ["CTRL", "L"]
+    },
+    {
+      "Description": "Unlock",
+      "Keys": ["CTRL", "SHIFT", "L"]
+    },
+    {
+      "Description": "Bring to front",
+      "Keys": ["CTRL", "SHIFT", "]"]
+    },
+    {
+      "Description": "Bring forward",
+      "Keys": ["CTRL", "]"]
+    },
+    {
+      "Description": "Send backward",
+      "Keys": ["CTRL", "["]
+    },
+    {
+      "Description": "Send to back",
+      "Keys": ["CTRL", "SHIFT", "["]
+    },
+    {
+      "Description": "Align left",
+      "Keys": ["CTRL", "ALT", "1"]
+    },
+    {
+      "Description": "Align center",
+      "Keys": ["CTRL", "ALT", "2"]
+    },
+    {
+      "Description": "Align right",
+      "Keys": ["CTRL", "ALT", "3"]
+    },
+    {
+      "Description": "Align top",
+      "Keys": ["CTRL", "ALT", "4"]
+    },
+    {
+      "Description": "Align middle",
+      "Keys": ["CTRL", "ALT", "5"]
+    },
+    {
+      "Description": "Align bottom",
+      "Keys": ["CTRL", "ALT", "6"]
+    },
+    {
+      "Description": "Distribute horizontally",
+      "Keys": ["CTRL", "ALT", "7"]
+    },
+    {
+      "Description": "Distribute vertically",
+      "Keys": ["CTRL", "ALT", "8"]
+    },
+    {
+      "Description": "Zoom in",
+      "Keys": ["CTRL", "+"]
+    },
+    {
+      "Description": "Zoom out",
+      "Keys": ["CTRL", "-"]
+    },
+    {
+      "Description": "Fit to screen",
+      "Keys": ["CTRL", "0"]
+    },
+    {
+      "Description": "Actual size",
+      "Keys": ["CTRL", "1"]
+    },
+    {
+      "Description": "Hand tool",
+      "Keys": ["H"]
+    },
+    {
+      "Description": "Zoom tool",
+      "Keys": ["Z"]
+    },
+    {
+      "Description": "Select tool",
+      "Keys": ["V"]
+    },
+    {
+      "Description": "Text tool",
+      "Keys": ["T"]
+    },
+    {
+      "Description": "Shape tool",
+      "Keys": ["S"]
+    },
+    {
+      "Description": "Line tool",
+      "Keys": ["L"]
+    },
+    {
+      "Description": "Upload tool",
+      "Keys": ["U"]
+    },
+    {
+      "Description": "Background tool",
+      "Keys": ["B"]
+    },
+    {
+      "Description": "Elements tool",
+      "Keys": ["E"]
+    },
+    {
+      "Description": "Uploads tool",
+      "Keys": ["U"]
+    },
+    {
+      "Description": "Templates tool",
+      "Keys": ["M"]
+    },
+    {
+      "Description": "Brand kit",
+      "Keys": ["CTRL", "B"]
+    },
+    {
+      "Description": "Color picker",
+      "Keys": ["I"]
+    },
+    {
+      "Description": "Grid",
+      "Keys": ["CTRL", "SHIFT", "G"]
+    },
+    {
+      "Description": "Guides",
+      "Keys": ["CTRL", "SHIFT", "U"]
+    },
+    {
+      "Description": "Snap to grid",
+      "Keys": ["CTRL", "SHIFT", "S"]
+    },
+    {
+      "Description": "Snap to guides",
+      "Keys": ["CTRL", "SHIFT", "G"]
+    },
+    {
+      "Description": "Show/hide rulers",
+      "Keys": ["CTRL", "R"]
+    },
+    {
+      "Description": "Show/hide grid",
+      "Keys": ["CTRL", "SHIFT", "G"]
+    },
+    {
+      "Description": "Show/hide guides",
+      "Keys": ["CTRL", "SHIFT", "U"]
+    },
+    {
+      "Description": "Show/hide margins",
+      "Keys": ["CTRL", "SHIFT", "M"]
+    },
+    {
+      "Description": "Show/hide bleed",
+      "Keys": ["CTRL", "SHIFT", "B"]
+    },
+    {
+      "Description": "Show/hide safe area",
+      "Keys": ["CTRL", "SHIFT", "A"]
+    },
+    {
+      "Description": "Show/hide crop marks",
+      "Keys": ["CTRL", "SHIFT", "C"]
+    },
+    {
+      "Description": "Show/hide registration marks",
+      "Keys": ["CTRL", "SHIFT", "R"]
+    },
+    {
+      "Description": "Show/hide color bars",
+      "Keys": ["CTRL", "SHIFT", "B"]
+    },
+    {
+      "Description": "Show/hide page info",
+      "Keys": ["CTRL", "SHIFT", "I"]
+    },
+    {
+      "Description": "Show/hide page numbers",
+      "Keys": ["CTRL", "SHIFT", "N"]
+    },
+    {
+      "Description": "Show/hide page names",
+      "Keys": ["CTRL", "SHIFT", "A"]
+    },
+    {
+      "Description": "Show/hide page thumbnails",
+      "Keys": ["CTRL", "SHIFT", "T"]
+    },
+    {
+      "Description": "Show/hide page list",
+      "Keys": ["CTRL", "SHIFT", "L"]
+    },
+    {
+      "Description": "Show/hide page grid",
+      "Keys": ["CTRL", "SHIFT", "G"]
+    },
+    {
+      "Description": "Show/hide page gallery",
+      "Keys": ["CTRL", "SHIFT", "Y"]
+    },
+    {
+      "Description": "Show/hide page carousel",
+      "Keys": ["CTRL", "SHIFT", "C"]
+    },
+    {
+      "Description": "Show/hide page slideshow",
+      "Keys": ["CTRL", "SHIFT", "S"]
+    },
+    {
+      "Description": "Show/hide page presentation",
+      "Keys": ["CTRL", "SHIFT", "P"]
+    },
+    {
+      "Description": "Show/hide page fullscreen",
+      "Keys": ["F11"]
+    },
+    {
+      "Description": "Show/hide page preview",
+      "Keys": ["CTRL", "SHIFT", "V"]
+    },
+    {
+      "Description": "Show/hide page print",
+      "Keys": ["CTRL", "SHIFT", "P"]
+    },
+    {
+      "Description": "Show/hide page export",
+      "Keys": ["CTRL", "SHIFT", "E"]
+    },
+    {
+      "Description": "Show/hide page share",
+      "Keys": ["CTRL", "SHIFT", "S"]
+    },
+    {
+      "Description": "Show/hide page download",
+      "Keys": ["CTRL", "SHIFT", "D"]
+    },
+    {
+      "Description": "Show/hide page publish",
+      "Keys": ["CTRL", "SHIFT", "B"]
+    },
+    {
+      "Description": "Show/hide page schedule",
+      "Keys": ["CTRL", "SHIFT", "H"]
+    },
+    {
+      "Description": "Show/hide page analytics",
+      "Keys": ["CTRL", "SHIFT", "A"]
+    },
+    {
+      "Description": "Show/hide page comments",
+      "Keys": ["CTRL", "SHIFT", "M"]
+    },
+    {
+      "Description": "Show/hide page version history",
+      "Keys": ["CTRL", "SHIFT", "H"]
+    },
+    {
+      "Description": "Show/hide page restore",
+      "Keys": ["CTRL", "SHIFT", "R"]
+    },
+    {
+      "Description": "Show/hide page duplicate",
+      "Keys": ["CTRL", "SHIFT", "D"]
+    },
+    {
+      "Description": "Show/hide page rename",
+      "Keys": ["CTRL", "SHIFT", "N"]
+    },
+    {
+      "Description": "Show/hide page move",
+      "Keys": ["CTRL", "SHIFT", "M"]
+    },
+    {
+      "Description": "Show/hide page copy",
+      "Keys": ["CTRL", "SHIFT", "C"]
+    },
+    {
+      "Description": "Show/hide page delete",
+      "Keys": ["CTRL", "SHIFT", "DELETE"]
+    },
+    {
+      "Description": "Show/hide page archive",
+      "Keys": ["CTRL", "SHIFT", "A"]
+    },
+    {
+      "Description": "Show/hide page unarchive",
+      "Keys": ["CTRL", "SHIFT", "U"]
+    },
+    {
+      "Description": "Show/hide page restore",
+      "Keys": ["CTRL", "SHIFT", "R"]
+    },
+    {
+      "Description": "Show/hide page trash",
+      "Keys": ["CTRL", "SHIFT", "T"]
+    },
+    {
+      "Description": "Show/hide page empty trash",
+      "Keys": ["CTRL", "SHIFT", "E"]
+    },
+    {
+      "Description": "Show/hide page recover",
+      "Keys": ["CTRL", "SHIFT", "R"]
+    },
+    {
+      "Description": "Show/hide page permanently delete",
+      "Keys": ["CTRL", "SHIFT", "DELETE"]
+    }
+  ]
+}

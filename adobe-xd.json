@@ -1,0 +1,397 @@
+{
+  "Name": "Adobe XD - UI/UX Design",
+  "Shortcuts": [
+    {
+      "Description": "New document",
+      "Keys": ["CTRL", "N"]
+    },
+    {
+      "Description": "Open file",
+      "Keys": ["CTRL", "O"]
+    },
+    {
+      "Description": "Save",
+      "Keys": ["CTRL", "S"]
+    },
+    {
+      "Description": "Save As",
+      "Keys": ["CTRL", "SHIFT", "S"]
+    },
+    {
+      "Description": "Export",
+      "Keys": ["CTRL", "E"]
+    },
+    {
+      "Description": "Close document",
+      "Keys": ["CTRL", "W"]
+    },
+    {
+      "Description": "Quit XD",
+      "Keys": ["CTRL", "Q"]
+    },
+    {
+      "Description": "Undo",
+      "Keys": ["CTRL", "Z"]
+    },
+    {
+      "Description": "Redo",
+      "Keys": ["CTRL", "SHIFT", "Z"]
+    },
+    {
+      "Description": "Cut",
+      "Keys": ["CTRL", "X"]
+    },
+    {
+      "Description": "Copy",
+      "Keys": ["CTRL", "C"]
+    },
+    {
+      "Description": "Paste",
+      "Keys": ["CTRL", "V"]
+    },
+    {
+      "Description": "Paste in place",
+      "Keys": ["CTRL", "SHIFT", "V"]
+    },
+    {
+      "Description": "Select all",
+      "Keys": ["CTRL", "A"]
+    },
+    {
+      "Description": "Deselect",
+      "Keys": ["CTRL", "D"]
+    },
+    {
+      "Description": "Duplicate",
+      "Keys": ["CTRL", "SHIFT", "D"]
+    },
+    {
+      "Description": "Delete",
+      "Keys": ["DELETE"]
+    },
+    {
+      "Description": "Group",
+      "Keys": ["CTRL", "G"]
+    },
+    {
+      "Description": "Ungroup",
+      "Keys": ["CTRL", "SHIFT", "G"]
+    },
+    {
+      "Description": "Lock",
+      "Keys": ["CTRL", "L"]
+    },
+    {
+      "Description": "Unlock all",
+      "Keys": ["CTRL", "SHIFT", "L"]
+    },
+    {
+      "Description": "Hide",
+      "Keys": ["CTRL", "SHIFT", "H"]
+    },
+    {
+      "Description": "Show all",
+      "Keys": ["CTRL", "ALT", "SHIFT", "H"]
+    },
+    {
+      "Description": "Bring to front",
+      "Keys": ["CTRL", "SHIFT", "]"]
+    },
+    {
+      "Description": "Bring forward",
+      "Keys": ["CTRL", "]"]
+    },
+    {
+      "Description": "Send backward",
+      "Keys": ["CTRL", "["]
+    },
+    {
+      "Description": "Send to back",
+      "Keys": ["CTRL", "SHIFT", "["]
+    },
+    {
+      "Description": "Align left",
+      "Keys": ["CTRL", "ALT", "1"]
+    },
+    {
+      "Description": "Align center",
+      "Keys": ["CTRL", "ALT", "2"]
+    },
+    {
+      "Description": "Align right",
+      "Keys": ["CTRL", "ALT", "3"]
+    },
+    {
+      "Description": "Align top",
+      "Keys": ["CTRL", "ALT", "4"]
+    },
+    {
+      "Description": "Align middle",
+      "Keys": ["CTRL", "ALT", "5"]
+    },
+    {
+      "Description": "Align bottom",
+      "Keys": ["CTRL", "ALT", "6"]
+    },
+    {
+      "Description": "Distribute horizontally",
+      "Keys": ["CTRL", "ALT", "7"]
+    },
+    {
+      "Description": "Distribute vertically",
+      "Keys": ["CTRL", "ALT", "8"]
+    },
+    {
+      "Description": "Zoom in",
+      "Keys": ["CTRL", "+"]
+    },
+    {
+      "Description": "Zoom out",
+      "Keys": ["CTRL", "-"]
+    },
+    {
+      "Description": "Fit to screen",
+      "Keys": ["CTRL", "0"]
+    },
+    {
+      "Description": "Actual size",
+      "Keys": ["CTRL", "1"]
+    },
+    {
+      "Description": "Hand tool",
+      "Keys": ["H"]
+    },
+    {
+      "Description": "Zoom tool",
+      "Keys": ["Z"]
+    },
+    {
+      "Description": "Select tool",
+      "Keys": ["V"]
+    },
+    {
+      "Description": "Rectangle tool",
+      "Keys": ["R"]
+    },
+    {
+      "Description": "Ellipse tool",
+      "Keys": ["E"]
+    },
+    {
+      "Description": "Line tool",
+      "Keys": ["L"]
+    },
+    {
+      "Description": "Pen tool",
+      "Keys": ["P"]
+    },
+    {
+      "Description": "Text tool",
+      "Keys": ["T"]
+    },
+    {
+      "Description": "Artboard tool",
+      "Keys": ["A"]
+    },
+    {
+      "Description": "Symbol tool",
+      "Keys": ["Y"]
+    },
+    {
+      "Description": "Repeat grid",
+      "Keys": ["CTRL", "R"]
+    },
+    {
+      "Description": "Mask",
+      "Keys": ["CTRL", "SHIFT", "M"]
+    },
+    {
+      "Description": "Boolean operations",
+      "Keys": ["CTRL", "SHIFT", "B"]
+    },
+    {
+      "Description": "Convert to path",
+      "Keys": ["CTRL", "SHIFT", "O"]
+    },
+    {
+      "Description": "Outline stroke",
+      "Keys": ["CTRL", "SHIFT", "O"]
+    },
+    {
+      "Description": "Flatten",
+      "Keys": ["CTRL", "SHIFT", "F"]
+    },
+    {
+      "Description": "Rasterize",
+      "Keys": ["CTRL", "SHIFT", "R"]
+    },
+    {
+      "Description": "Create component",
+      "Keys": ["CTRL", "ALT", "K"]
+    },
+    {
+      "Description": "Detach instance",
+      "Keys": ["CTRL", "ALT", "SHIFT", "K"]
+    },
+    {
+      "Description": "Edit component",
+      "Keys": ["CTRL", "ALT", "E"]
+    },
+    {
+      "Description": "Exit component",
+      "Keys": ["ESC"]
+    },
+    {
+      "Description": "Create symbol",
+      "Keys": ["CTRL", "SHIFT", "K"]
+    },
+    {
+      "Description": "Break symbol",
+      "Keys": ["CTRL", "ALT", "SHIFT", "B"]
+    },
+    {
+      "Description": "Edit symbol",
+      "Keys": ["CTRL", "ALT", "E"]
+    },
+    {
+      "Description": "Exit symbol",
+      "Keys": ["ESC"]
+    },
+    {
+      "Description": "Create repeat grid",
+      "Keys": ["CTRL", "R"]
+    },
+    {
+      "Description": "Remove repeat grid",
+      "Keys": ["CTRL", "SHIFT", "R"]
+    },
+    {
+      "Description": "Create mask",
+      "Keys": ["CTRL", "SHIFT", "M"]
+    },
+    {
+      "Description": "Release mask",
+      "Keys": ["CTRL", "ALT", "SHIFT", "M"]
+    },
+    {
+      "Description": "Create clipping mask",
+      "Keys": ["CTRL", "SHIFT", "M"]
+    },
+    {
+      "Description": "Release clipping mask",
+      "Keys": ["CTRL", "ALT", "SHIFT", "M"]
+    },
+    {
+      "Description": "Create boolean group",
+      "Keys": ["CTRL", "SHIFT", "B"]
+    },
+    {
+      "Description": "Release boolean group",
+      "Keys": ["CTRL", "ALT", "SHIFT", "B"]
+    },
+    {
+      "Description": "Create path",
+      "Keys": ["CTRL", "SHIFT", "O"]
+    },
+    {
+      "Description": "Release path",
+      "Keys": ["CTRL", "ALT", "SHIFT", "O"]
+    },
+    {
+      "Description": "Create outline",
+      "Keys": ["CTRL", "SHIFT", "O"]
+    },
+    {
+      "Description": "Release outline",
+      "Keys": ["CTRL", "ALT", "SHIFT", "O"]
+    },
+    {
+      "Description": "Create flatten",
+      "Keys": ["CTRL", "SHIFT", "F"]
+    },
+    {
+      "Description": "Release flatten",
+      "Keys": ["CTRL", "ALT", "SHIFT", "F"]
+    },
+    {
+      "Description": "Create rasterize",
+      "Keys": ["CTRL", "SHIFT", "R"]
+    },
+    {
+      "Description": "Release rasterize",
+      "Keys": ["CTRL", "ALT", "SHIFT", "R"]
+    },
+    {
+      "Description": "Create component",
+      "Keys": ["CTRL", "ALT", "K"]
+    },
+    {
+      "Description": "Release component",
+      "Keys": ["CTRL", "ALT", "SHIFT", "K"]
+    },
+    {
+      "Description": "Create symbol",
+      "Keys": ["CTRL", "SHIFT", "K"]
+    },
+    {
+      "Description": "Release symbol",
+      "Keys": ["CTRL", "ALT", "SHIFT", "K"]
+    },
+    {
+      "Description": "Create repeat grid",
+      "Keys": ["CTRL", "R"]
+    },
+    {
+      "Description": "Release repeat grid",
+      "Keys": ["CTRL", "SHIFT", "R"]
+    },
+    {
+      "Description": "Create mask",
+      "Keys": ["CTRL", "SHIFT", "M"]
+    },
+    {
+      "Description": "Release mask",
+      "Keys": ["CTRL", "ALT", "SHIFT", "M"]
+    },
+    {
+      "Description": "Create boolean group",
+      "Keys": ["CTRL", "SHIFT", "B"]
+    },
+    {
+      "Description": "Release boolean group",
+      "Keys": ["CTRL", "ALT", "SHIFT", "B"]
+    },
+    {
+      "Description": "Create path",
+      "Keys": ["CTRL", "SHIFT", "O"]
+    },
+    {
+      "Description": "Release path",
+      "Keys": ["CTRL", "ALT", "SHIFT", "O"]
+    },
+    {
+      "Description": "Create outline",
+      "Keys": ["CTRL", "SHIFT", "O"]
+    },
+    {
+      "Description": "Release outline",
+      "Keys": ["CTRL", "ALT", "SHIFT", "O"]
+    },
+    {
+      "Description": "Create flatten",
+      "Keys": ["CTRL", "SHIFT", "F"]
+    },
+    {
+      "Description": "Release flatten",
+      "Keys": ["CTRL", "ALT", "SHIFT", "F"]
+    },
+    {
+      "Description": "Create rasterize",
+      "Keys": ["CTRL", "SHIFT", "R"]
+    },
+    {
+      "Description": "Release rasterize",
+      "Keys": ["CTRL", "ALT", "SHIFT", "R"]
+    }
+  ]
+}

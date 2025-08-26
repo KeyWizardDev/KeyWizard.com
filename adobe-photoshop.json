@@ -1,0 +1,765 @@
+{
+  "Name": "Adobe Photoshop - Image Editing Essentials",
+  "Shortcuts": [
+    {
+      "Description": "New document",
+      "Keys": ["CTRL", "N"]
+    },
+    {
+      "Description": "Open file",
+      "Keys": ["CTRL", "O"]
+    },
+    {
+      "Description": "Save",
+      "Keys": ["CTRL", "S"]
+    },
+    {
+      "Description": "Save As",
+      "Keys": ["CTRL", "SHIFT", "S"]
+    },
+    {
+      "Description": "Save for Web",
+      "Keys": ["CTRL", "ALT", "SHIFT", "S"]
+    },
+    {
+      "Description": "Close document",
+      "Keys": ["CTRL", "W"]
+    },
+    {
+      "Description": "Quit Photoshop",
+      "Keys": ["CTRL", "Q"]
+    },
+    {
+      "Description": "Undo",
+      "Keys": ["CTRL", "Z"]
+    },
+    {
+      "Description": "Redo",
+      "Keys": ["CTRL", "SHIFT", "Z"]
+    },
+    {
+      "Description": "Step backward",
+      "Keys": ["CTRL", "ALT", "Z"]
+    },
+    {
+      "Description": "Step forward",
+      "Keys": ["CTRL", "SHIFT", "Z"]
+    },
+    {
+      "Description": "Cut",
+      "Keys": ["CTRL", "X"]
+    },
+    {
+      "Description": "Copy",
+      "Keys": ["CTRL", "C"]
+    },
+    {
+      "Description": "Copy merged",
+      "Keys": ["CTRL", "SHIFT", "C"]
+    },
+    {
+      "Description": "Paste",
+      "Keys": ["CTRL", "V"]
+    },
+    {
+      "Description": "Paste in place",
+      "Keys": ["CTRL", "SHIFT", "V"]
+    },
+    {
+      "Description": "Free transform",
+      "Keys": ["CTRL", "T"]
+    },
+    {
+      "Description": "Transform again",
+      "Keys": ["CTRL", "SHIFT", "T"]
+    },
+    {
+      "Description": "Select all",
+      "Keys": ["CTRL", "A"]
+    },
+    {
+      "Description": "Deselect",
+      "Keys": ["CTRL", "D"]
+    },
+    {
+      "Description": "Reselect",
+      "Keys": ["CTRL", "SHIFT", "D"]
+    },
+    {
+      "Description": "Inverse selection",
+      "Keys": ["CTRL", "SHIFT", "I"]
+    },
+    {
+      "Description": "Feather selection",
+      "Keys": ["CTRL", "ALT", "D"]
+    },
+    {
+      "Description": "Zoom in",
+      "Keys": ["CTRL", "+"]
+    },
+    {
+      "Description": "Zoom out",
+      "Keys": ["CTRL", "-"]
+    },
+    {
+      "Description": "Fit on screen",
+      "Keys": ["CTRL", "0"]
+    },
+    {
+      "Description": "Actual pixels",
+      "Keys": ["CTRL", "1"]
+    },
+    {
+      "Description": "Print size",
+      "Keys": ["CTRL", "ALT", "0"]
+    },
+    {
+      "Description": "Hand tool",
+      "Keys": ["H"]
+    },
+    {
+      "Description": "Zoom tool",
+      "Keys": ["Z"]
+    },
+    {
+      "Description": "Move tool",
+      "Keys": ["V"]
+    },
+    {
+      "Description": "Marquee tool",
+      "Keys": ["M"]
+    },
+    {
+      "Description": "Lasso tool",
+      "Keys": ["L"]
+    },
+    {
+      "Description": "Magic wand tool",
+      "Keys": ["W"]
+    },
+    {
+      "Description": "Crop tool",
+      "Keys": ["C"]
+    },
+    {
+      "Description": "Eyedropper tool",
+      "Keys": ["I"]
+    },
+    {
+      "Description": "Healing brush tool",
+      "Keys": ["J"]
+    },
+    {
+      "Description": "Brush tool",
+      "Keys": ["B"]
+    },
+    {
+      "Description": "Stamp tool",
+      "Keys": ["S"]
+    },
+    {
+      "Description": "History brush tool",
+      "Keys": ["Y"]
+    },
+    {
+      "Description": "Eraser tool",
+      "Keys": ["E"]
+    },
+    {
+      "Description": "Gradient tool",
+      "Keys": ["G"]
+    },
+    {
+      "Description": "Blur tool",
+      "Keys": ["R"]
+    },
+    {
+      "Description": "Dodge tool",
+      "Keys": ["O"]
+    },
+    {
+      "Description": "Pen tool",
+      "Keys": ["P"]
+    },
+    {
+      "Description": "Type tool",
+      "Keys": ["T"]
+    },
+    {
+      "Description": "Path selection tool",
+      "Keys": ["A"]
+    },
+    {
+      "Description": "Rectangle tool",
+      "Keys": ["U"]
+    },
+    {
+      "Description": "Notes tool",
+      "Keys": ["N"]
+    },
+    {
+      "Description": "Eyedropper tool",
+      "Keys": ["I"]
+    },
+    {
+      "Description": "Hand tool",
+      "Keys": ["H"]
+    },
+    {
+      "Description": "Rotate view tool",
+      "Keys": ["R"]
+    },
+    {
+      "Description": "Zoom tool",
+      "Keys": ["Z"]
+    },
+    {
+      "Description": "Default colors",
+      "Keys": ["D"]
+    },
+    {
+      "Description": "Switch colors",
+      "Keys": ["X"]
+    },
+    {
+      "Description": "Toggle quick mask",
+      "Keys": ["Q"]
+    },
+    {
+      "Description": "Toggle screen modes",
+      "Keys": ["F"]
+    },
+    {
+      "Description": "Toggle layers panel",
+      "Keys": ["F7"]
+    },
+    {
+      "Description": "Toggle channels panel",
+      "Keys": ["F8"]
+    },
+    {
+      "Description": "Toggle paths panel",
+      "Keys": ["F9"]
+    },
+    {
+      "Description": "Toggle actions panel",
+      "Keys": ["ALT", "F9"]
+    },
+    {
+      "Description": "Toggle info panel",
+      "Keys": ["F8"]
+    },
+    {
+      "Description": "Toggle navigator panel",
+      "Keys": ["F8"]
+    },
+    {
+      "Description": "Toggle history panel",
+      "Keys": ["F8"]
+    },
+    {
+      "Description": "Toggle color panel",
+      "Keys": ["F6"]
+    },
+    {
+      "Description": "Toggle swatches panel",
+      "Keys": ["F6"]
+    },
+    {
+      "Description": "Toggle styles panel",
+      "Keys": ["F6"]
+    },
+    {
+      "Description": "Toggle character panel",
+      "Keys": ["CTRL", "T"]
+    },
+    {
+      "Description": "Toggle paragraph panel",
+      "Keys": ["CTRL", "M"]
+    },
+    {
+      "Description": "Toggle options bar",
+      "Keys": ["F8"]
+    },
+    {
+      "Description": "Toggle status bar",
+      "Keys": ["F8"]
+    },
+    {
+      "Description": "Toggle toolbox",
+      "Keys": ["TAB"]
+    },
+    {
+      "Description": "Toggle all panels",
+      "Keys": ["TAB"]
+    },
+    {
+      "Description": "Show/hide rulers",
+      "Keys": ["CTRL", "R"]
+    },
+    {
+      "Description": "Show/hide guides",
+      "Keys": ["CTRL", ";"]
+    },
+    {
+      "Description": "Lock guides",
+      "Keys": ["CTRL", "ALT", ";"]
+    },
+    {
+      "Description": "Clear guides",
+      "Keys": ["CTRL", "ALT", "G"]
+    },
+    {
+      "Description": "Show/hide grid",
+      "Keys": ["CTRL", "'"]
+    },
+    {
+      "Description": "Snap to grid",
+      "Keys": ["CTRL", "SHIFT", "'"]
+    },
+    {
+      "Description": "Snap to guides",
+      "Keys": ["CTRL", "SHIFT", ";"]
+    },
+    {
+      "Description": "New layer",
+      "Keys": ["CTRL", "SHIFT", "N"]
+    },
+    {
+      "Description": "New layer via copy",
+      "Keys": ["CTRL", "J"]
+    },
+    {
+      "Description": "New layer via cut",
+      "Keys": ["CTRL", "SHIFT", "J"]
+    },
+    {
+      "Description": "Delete layer",
+      "Keys": ["DELETE"]
+    },
+    {
+      "Description": "Duplicate layer",
+      "Keys": ["CTRL", "J"]
+    },
+    {
+      "Description": "Merge layers",
+      "Keys": ["CTRL", "E"]
+    },
+    {
+      "Description": "Merge visible",
+      "Keys": ["CTRL", "SHIFT", "E"]
+    },
+    {
+      "Description": "Flatten image",
+      "Keys": ["CTRL", "SHIFT", "ALT", "E"]
+    },
+    {
+      "Description": "Layer via copy",
+      "Keys": ["CTRL", "J"]
+    },
+    {
+      "Description": "Layer via cut",
+      "Keys": ["CTRL", "SHIFT", "J"]
+    },
+    {
+      "Description": "Group layers",
+      "Keys": ["CTRL", "G"]
+    },
+    {
+      "Description": "Ungroup layers",
+      "Keys": ["CTRL", "SHIFT", "G"]
+    },
+    {
+      "Description": "Hide/show layer",
+      "Keys": ["CTRL", "SHIFT", "H"]
+    },
+    {
+      "Description": "Lock/unlock layer",
+      "Keys": ["CTRL", "SHIFT", "L"]
+    },
+    {
+      "Description": "Select layer contents",
+      "Keys": ["CTRL", "CLICK"]
+    },
+    {
+      "Description": "Load layer as selection",
+      "Keys": ["CTRL", "CLICK"]
+    },
+    {
+      "Description": "Add to selection",
+      "Keys": ["SHIFT", "CLICK"]
+    },
+    {
+      "Description": "Subtract from selection",
+      "Keys": ["ALT", "CLICK"]
+    },
+    {
+      "Description": "Intersect with selection",
+      "Keys": ["ALT", "SHIFT", "CLICK"]
+    },
+    {
+      "Description": "Fill with foreground color",
+      "Keys": ["ALT", "DELETE"]
+    },
+    {
+      "Description": "Fill with background color",
+      "Keys": ["CTRL", "DELETE"]
+    },
+    {
+      "Description": "Fill with pattern",
+      "Keys": ["SHIFT", "F5"]
+    },
+    {
+      "Description": "Stroke selection",
+      "Keys": ["SHIFT", "F5"]
+    },
+    {
+      "Description": "Define brush preset",
+      "Keys": ["CTRL", "ALT", "B"]
+    },
+    {
+      "Description": "Define pattern",
+      "Keys": ["CTRL", "ALT", "P"]
+    },
+    {
+      "Description": "Define custom shape",
+      "Keys": ["CTRL", "ALT", "S"]
+    },
+    {
+      "Description": "Purge memory",
+      "Keys": ["CTRL", "ALT", "SHIFT", "P"]
+    },
+    {
+      "Description": "Purge clipboard",
+      "Keys": ["CTRL", "ALT", "SHIFT", "C"]
+    },
+    {
+      "Description": "Purge history",
+      "Keys": ["CTRL", "ALT", "SHIFT", "H"]
+    },
+    {
+      "Description": "Purge all",
+      "Keys": ["CTRL", "ALT", "SHIFT", "A"]
+    },
+    {
+      "Description": "Color settings",
+      "Keys": ["CTRL", "SHIFT", "K"]
+    },
+    {
+      "Description": "Keyboard shortcuts",
+      "Keys": ["CTRL", "ALT", "SHIFT", "K"]
+    },
+    {
+      "Description": "Menus",
+      "Keys": ["CTRL", "ALT", "SHIFT", "M"]
+    },
+    {
+      "Description": "Preferences",
+      "Keys": ["CTRL", "K"]
+    },
+    {
+      "Description": "General preferences",
+      "Keys": ["CTRL", "K"]
+    },
+    {
+      "Description": "Interface preferences",
+      "Keys": ["CTRL", "ALT", "1"]
+    },
+    {
+      "Description": "File handling preferences",
+      "Keys": ["CTRL", "ALT", "2"]
+    },
+    {
+      "Description": "Performance preferences",
+      "Keys": ["CTRL", "ALT", "3"]
+    },
+    {
+      "Description": "Cursor preferences",
+      "Keys": ["CTRL", "ALT", "4"]
+    },
+    {
+      "Description": "Transparency preferences",
+      "Keys": ["CTRL", "ALT", "5"]
+    },
+    {
+      "Description": "Units & rulers preferences",
+      "Keys": ["CTRL", "ALT", "6"]
+    },
+    {
+      "Description": "Guides, grid & slices preferences",
+      "Keys": ["CTRL", "ALT", "7"]
+    },
+    {
+      "Description": "Plug-ins preferences",
+      "Keys": ["CTRL", "ALT", "8"]
+    },
+    {
+      "Description": "Type preferences",
+      "Keys": ["CTRL", "ALT", "9"]
+    },
+    {
+      "Description": "3D preferences",
+      "Keys": ["CTRL", "ALT", "0"]
+    },
+    {
+      "Description": "Help",
+      "Keys": ["F1"]
+    },
+    {
+      "Description": "About Photoshop",
+      "Keys": ["CTRL", "ALT", "SHIFT", "A"]
+    },
+    {
+      "Description": "System info",
+      "Keys": ["CTRL", "ALT", "SHIFT", "I"]
+    },
+    {
+      "Description": "Export",
+      "Keys": ["CTRL", "ALT", "SHIFT", "E"]
+    },
+    {
+      "Description": "Automate",
+      "Keys": ["CTRL", "ALT", "SHIFT", "A"]
+    },
+    {
+      "Description": "Scripts",
+      "Keys": ["CTRL", "ALT", "SHIFT", "S"]
+    },
+    {
+      "Description": "Image processor",
+      "Keys": ["CTRL", "ALT", "SHIFT", "I"]
+    },
+    {
+      "Description": "Contact sheet II",
+      "Keys": ["CTRL", "ALT", "SHIFT", "C"]
+    },
+    {
+      "Description": "Picture package",
+      "Keys": ["CTRL", "ALT", "SHIFT", "P"]
+    },
+    {
+      "Description": "Web photo gallery",
+      "Keys": ["CTRL", "ALT", "SHIFT", "W"]
+    },
+    {
+      "Description": "Crop and straighten photos",
+      "Keys": ["CTRL", "ALT", "SHIFT", "C"]
+    },
+    {
+      "Description": "Fit image",
+      "Keys": ["CTRL", "ALT", "SHIFT", "F"]
+    },
+    {
+      "Description": "Multi-page PDF to PSD",
+      "Keys": ["CTRL", "ALT", "SHIFT", "M"]
+    },
+    {
+      "Description": "Photomerge",
+      "Keys": ["CTRL", "ALT", "SHIFT", "P"]
+    },
+    {
+      "Description": "Merge to HDR Pro",
+      "Keys": ["CTRL", "ALT", "SHIFT", "H"]
+    },
+    {
+      "Description": "Align layers",
+      "Keys": ["CTRL", "ALT", "SHIFT", "A"]
+    },
+    {
+      "Description": "Distribute layers",
+      "Keys": ["CTRL", "ALT", "SHIFT", "D"]
+    },
+    {
+      "Description": "Auto-align layers",
+      "Keys": ["CTRL", "ALT", "SHIFT", "A"]
+    },
+    {
+      "Description": "Auto-blend layers",
+      "Keys": ["CTRL", "ALT", "SHIFT", "B"]
+    },
+    {
+      "Description": "Convert to smart object",
+      "Keys": ["CTRL", "ALT", "SHIFT", "O"]
+    },
+    {
+      "Description": "Edit contents",
+      "Keys": ["CTRL", "ALT", "SHIFT", "E"]
+    },
+    {
+      "Description": "Export contents",
+      "Keys": ["CTRL", "ALT", "SHIFT", "X"]
+    },
+    {
+      "Description": "Replace contents",
+      "Keys": ["CTRL", "ALT", "SHIFT", "R"]
+    },
+    {
+      "Description": "Reset transform",
+      "Keys": ["CTRL", "ALT", "SHIFT", "T"]
+    },
+    {
+      "Description": "Warp",
+      "Keys": ["CTRL", "ALT", "SHIFT", "W"]
+    },
+    {
+      "Description": "Perspective",
+      "Keys": ["CTRL", "ALT", "SHIFT", "P"]
+    },
+    {
+      "Description": "Rotate 180°",
+      "Keys": ["CTRL", "ALT", "SHIFT", "R"]
+    },
+    {
+      "Description": "Rotate 90° clockwise",
+      "Keys": ["CTRL", "ALT", "SHIFT", "C"]
+    },
+    {
+      "Description": "Rotate 90° counterclockwise",
+      "Keys": ["CTRL", "ALT", "SHIFT", "L"]
+    },
+    {
+      "Description": "Flip horizontal",
+      "Keys": ["CTRL", "ALT", "SHIFT", "H"]
+    },
+    {
+      "Description": "Flip vertical",
+      "Keys": ["CTRL", "ALT", "SHIFT", "V"]
+    },
+    {
+      "Description": "Auto levels",
+      "Keys": ["CTRL", "SHIFT", "L"]
+    },
+    {
+      "Description": "Auto contrast",
+      "Keys": ["CTRL", "ALT", "SHIFT", "L"]
+    },
+    {
+      "Description": "Auto color",
+      "Keys": ["CTRL", "SHIFT", "B"]
+    },
+    {
+      "Description": "Color balance",
+      "Keys": ["CTRL", "B"]
+    },
+    {
+      "Description": "Brightness/contrast",
+      "Keys": ["CTRL", "ALT", "B"]
+    },
+    {
+      "Description": "Hue/saturation",
+      "Keys": ["CTRL", "U"]
+    },
+    {
+      "Description": "Desaturate",
+      "Keys": ["CTRL", "SHIFT", "U"]
+    },
+    {
+      "Description": "Invert",
+      "Keys": ["CTRL", "I"]
+    },
+    {
+      "Description": "Equalize",
+      "Keys": ["CTRL", "ALT", "SHIFT", "E"]
+    },
+    {
+      "Description": "Threshold",
+      "Keys": ["CTRL", "ALT", "SHIFT", "T"]
+    },
+    {
+      "Description": "Posterize",
+      "Keys": ["CTRL", "ALT", "SHIFT", "P"]
+    },
+    {
+      "Description": "Variations",
+      "Keys": ["CTRL", "ALT", "SHIFT", "V"]
+    },
+    {
+      "Description": "Match color",
+      "Keys": ["CTRL", "ALT", "SHIFT", "M"]
+    },
+    {
+      "Description": "Replace color",
+      "Keys": ["CTRL", "ALT", "SHIFT", "R"]
+    },
+    {
+      "Description": "Selective color",
+      "Keys": ["CTRL", "ALT", "SHIFT", "S"]
+    },
+    {
+      "Description": "Channel mixer",
+      "Keys": ["CTRL", "ALT", "SHIFT", "C"]
+    },
+    {
+      "Description": "Gradient map",
+      "Keys": ["CTRL", "ALT", "SHIFT", "G"]
+    },
+    {
+      "Description": "Photo filter",
+      "Keys": ["CTRL", "ALT", "SHIFT", "F"]
+    },
+    {
+      "Description": "Shadow/highlights",
+      "Keys": ["CTRL", "ALT", "SHIFT", "H"]
+    },
+    {
+      "Description": "Exposure",
+      "Keys": ["CTRL", "ALT", "SHIFT", "E"]
+    },
+    {
+      "Description": "Black & white",
+      "Keys": ["CTRL", "ALT", "SHIFT", "B"]
+    },
+    {
+      "Description": "Levels",
+      "Keys": ["CTRL", "L"]
+    },
+    {
+      "Description": "Curves",
+      "Keys": ["CTRL", "M"]
+    },
+    {
+      "Description": "Vibrance",
+      "Keys": ["CTRL", "ALT", "SHIFT", "V"]
+    },
+    {
+      "Description": "Selective color",
+      "Keys": ["CTRL", "ALT", "SHIFT", "S"]
+    },
+    {
+      "Description": "Channel mixer",
+      "Keys": ["CTRL", "ALT", "SHIFT", "C"]
+    },
+    {
+      "Description": "Gradient map",
+      "Keys": ["CTRL", "ALT", "SHIFT", "G"]
+    },
+    {
+      "Description": "Photo filter",
+      "Keys": ["CTRL", "ALT", "SHIFT", "F"]
+    },
+    {
+      "Description": "Shadow/highlights",
+      "Keys": ["CTRL", "ALT", "SHIFT", "H"]
+    },
+    {
+      "Description": "Exposure",
+      "Keys": ["CTRL", "ALT", "SHIFT", "E"]
+    },
+    {
+      "Description": "Black & white",
+      "Keys": ["CTRL", "ALT", "SHIFT", "B"]
+    },
+    {
+      "Description": "Levels",
+      "Keys": ["CTRL", "L"]
+    },
+    {
+      "Description": "Curves",
+      "Keys": ["CTRL", "M"]
+    },
+    {
+      "Description": "Vibrance",
+      "Keys": ["CTRL", "ALT", "SHIFT", "V"]
+    }
+  ]
+}
