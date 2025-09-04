@@ -417,7 +417,7 @@ function PackageList({ packages, loading, onDelete }) {
   // Copy JSON to clipboard
   const handleCopyJson = (pkg) => {
     try {
-      const shortcuts = JSON.parse(pkg.shortcuts || '[]');
+      const shortcuts = typeof pkg.shortcuts === 'string' ? JSON.parse(pkg.shortcuts || '[]') : pkg.shortcuts || [];
       
       // Convert to KeyWizard format
       const keyWizardJson = {
@@ -438,7 +438,7 @@ function PackageList({ packages, loading, onDelete }) {
 
   const handleSaveAsJson = (pkg) => {
     try {
-      const shortcuts = JSON.parse(pkg.shortcuts || '[]');
+      const shortcuts = typeof pkg.shortcuts === 'string' ? JSON.parse(pkg.shortcuts || '[]') : pkg.shortcuts || [];
       
       // Convert to KeyWizard format
       const keyWizardJson = {
@@ -541,7 +541,7 @@ function PackageList({ packages, loading, onDelete }) {
 
   // Package card component
   const PackageCard = ({ pkg, showCategoryIcon = false }) => {
-    const shortcuts = JSON.parse(pkg.shortcuts || '[]');
+    const shortcuts = typeof pkg.shortcuts === 'string' ? JSON.parse(pkg.shortcuts || '[]') : pkg.shortcuts || [];
     const isOwner = user && pkg.author_id === user.id;
     const config = CATEGORIES[pkg.category] || { icon: null, color: '#6d665b', bgColor: '#f5f5f5' };
     const IconComponent = config.icon;
